@@ -1,0 +1,37 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="section">
+    {% if section.extra.logo %}
+    <div class="top-logo">
+        <img src="{{section.extra.logo}}" alt="{{section.title}}">
+        <h1 class="post-title">{{section.title | safe}}</h1>
+    </div>
+    {% else %}
+    <h1 class="post-title">{{ section.title | safe }}</h1>
+    {% endif%}
+
+    {{ section.content | safe }}
+</div>
+<div class="posts">
+    {% for _page in section.pages %}
+    <div class="post">
+        <h1 class="post-title">
+
+            {% if _page.extra.logo %}
+            <div class="logo">
+                <a href="{{get_url(path=_page.path)}}"><img src="{{_page.extra.logo}}" alt="{{_page.title}}"></a>
+                <a href="{{get_url(path=_page.path)}}">
+                    {{_page.title}}
+                </a>
+            </div>
+            {% else %}
+            <a href="{{get_url(path=_page.path)}}">{{_page.title | safe}}</a>
+            {% endif%}
+        </h1>
+
+        <span class="post-date">{{ _page.date | date(format="%Y-%m-%d") }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

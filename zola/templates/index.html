@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <!-- Enable responsiveness on mobile devices-->
+    <!-- viewport-fit=cover is to support iPhone X rounded corners and notch in landscape-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+
+    <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+
+    <!-- CSS -->
+    <!-- TODO: Fix css for sub-sections and pages -->
+    <link rel="stylesheet" href="../../print.css" media="print">
+    <link rel="stylesheet" href="../../poole.css">
+    <link rel="stylesheet" href="../../hyde.css">
+
+    {% if config.generate_feed %}
+    <link rel="alternate" type={% if config.feed_filename=="atom.xml" %}"application/atom+xml"{% else
+        %}"application/rss+xml"{% endif %} title="RSS" href="{{ get_url(path=config.feed_filename) | safe }}">
+    {% endif %}
+
+    {% block extra_head %}
+    {% endblock extra_head %}
+</head>
+
+<body class="{{ config.extra.hyde_theme }} {% if config.extra.hyde_reverse %}layout-reverse{% endif %}">
+    {% block sidebar %}
+    <div class="sidebar">
+        <div class="container {% if config.extra.hyde_sticky %}sidebar-sticky{% endif %}">
+            <div class="sidebar-about">
+                {% block sidebar_about %}
+                <a href="{{ config.base_url }}">
+                    <h1>{{ config.title }}</h1>
+                </a>
+                {% if config.description %}
+                <p class="lead">{{config.description}}</p>
+                {% endif %}
+                {% endblock sidebar_about %}
+            </div>
+
+            <ul class="sidebar-nav">
+                {% block sidebar_nav %}
+
+                {% set __item = get_page(path="./hello.md") %}
+                <li class="sidebar-nav-item">
+                    <a href="{{get_url(path=__item.path)}}">{{__item.title}}</a>
+                </li>
+                {% set __section = get_section(path="latest/_index.md") %}
+                <li class="sidebar-nav-item">
+                    <a href="{{get_url(path=__section.path)}}">{{__section.title}}</a>
+                </li>
+                {% set __section = get_section(path="projects/_index.md") %}
+                <li class="sidebar-nav-item">
+                    <a href="{{get_url(path=__section.path)}}">{{__section.title}}</a>
+                </li>
+                {% set __section = get_section(path="repos/_index.md") %}
+                <li class="sidebar-nav-item">
+                    <a href="{{get_url(path=__section.path)}}">{{__section.title}}</a>
+                </li>
+                {% set __item = get_page(path="./contact.md") %}
+                <li class="sidebar-nav-item">
+                    <a href="{{get_url(path=__item.path)}}">{{__item.title}}</a>
+                </li>
+                {% set __item = get_page(path="./about.md") %}
+                <li class="sidebar-nav-item">
+                    <a href="{{get_url(path=__item.path)}}">{{__item.title}}</a>
+                </li>
+
+                {% for link in config.extra.hyde_links %}
+                <li class="sidebar-nav-item"><a href="{{link.url}}">{{link.name}}</a></li>
+                {% endfor %}
+                {% endblock sidebar_nav %}
+            </ul>
+        </div>
+        <div class="sidebar-minor {% if config.extra.hyde_sticky %}sidebar-minor-sticky{% endif %}">
+            <div class="sidebar-icon-row">
+                <div class="sidebar-icon">
+                    <a href="https://github.com/LeHuman" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+                            <path
+                                d="M250,25.7c-127.1,0-230,103-230,230c0,101.6,65.9,187.8,157.3,218.2c11.5,2.2,15.7-4.9,15.7-11.1c0-5.5-0.2-19.9-0.3-39.1c-64,13.9-77.5-30.9-77.5-30.9c-10.5-26.6-25.5-33.7-25.5-33.7c-20.9-14.3,1.6-14,1.6-14c23.1,1.6,35.2,23.7,35.2,23.7c20.5,35.2,53.8,25,67,19.1c2.1-14.9,8-25,14.6-30.8c-51.1-5.8-104.8-25.5-104.8-113.7c0-25.1,8.9-45.6,23.7-61.7c-2.4-5.8-10.3-29.2,2.2-60.9c0,0,19.3-6.2,63.2,23.6c18.7-5.1,38.1-7.7,57.5-7.8c19.6,0.1,39.2,2.6,57.5,7.8c43.7-29.7,63-23.6,63-23.6c12.6,31.7,4.7,55.1,2.3,60.9c14.7,16.1,23.6,36.6,23.6,61.7c0,88.4-53.8,107.8-104.9,113.5c8.2,7.1,15.5,21.1,15.5,42.6c0,30.8-0.3,55.5-0.3,63c0,6.2,4,13.3,15.8,11.1c91.8-30.2,157.6-116.5,157.6-218C480,128.7,377,25.7,250,25.7" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="sidebar-icon">
+                    <a href="https://www.linkedin.com/" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+                            <path
+                                d="M428.6,37.5H71.4c-18.7,0-33.9,15.3-33.9,33.9v357.2c0,18.7,15.3,33.9,33.9,33.9h357.2c18.7,0,33.9-15.3,33.9-33.9V71.4C462.5,52.8,447.2,37.5,428.6,37.5z M160.7,402.7H99.3V200h61.4V402.7z M130.5,168.9c-19.8,0-35.9-16.1-35.9-35.9c0-19.8,16.1-35.9,35.9-35.9c19.8,0,35.9,16,35.9,35.9C166.4,152.8,150.3,168.9,130.5,168.9zM400.6,402.9h-62l0.2-108.6c0-65.5-77.9-52.3-80.6-2.7v111.1h-61.4V200h58.4v27.6c39.7-52.3,145.5-47,145.5,52.1C400.6,401.7,400.6,402.9,400.6,402.9z" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="sidebar-icon">
+                    <!-- TODO: Link resume externally -->
+                    <a href="resume.pdf" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+                            <path
+                                d="M482.8,416.3c-0.5,0.4-0.9,0.8-1.3,1.2c-26.8,26.8-53.6,53.6-80.4,80.4c-0.4,0.4-0.9,0.8-1.2,1.1c-27.7-27.7-55.3-55.3-83-83c21.9,0,43.9,0,66.1,0c0-33.3,0-66.4,0-99.7c11.1,0,22.1,0,33.2,0c0,33.1,0,66.2,0,99.6c22.3,0,44.4,0,66.6,0C482.8,416.1,482.8,416.2,482.8,416.3z" />
+                            <path
+                                d="M416.3,283c-11.1,0-22.1,0-33.2,0c0-0.7,0-1.4,0-2.1c0-59.9,0-119.8,0-179.6c0-6.8-2.7-12.3-8.8-15.7c-2.6-1.4-5.4-2-8.3-2c-44.3,0-88.6,0-132.9,0c-32.8,0-65.7,0-98.5,0c-8.4,0-14.8,4.6-16.8,13.1c-0.3,1.3-0.4,2.7-0.4,4.1c0,99.4,0,198.8,0,298.1c0,8.3,4.6,14.5,13.1,16.6c1.4,0.3,2.8,0.4,4.2,0.4c48.9,0,97.7,0,146.6,0c0.7,0,1.3,0,2.1,0c0,11,0,22,0,33.2c-0.6,0-1.1,0-1.7,0c-50.3,0-100.6,0-150.9,0c-5.3,0-10.4-1.5-15.3-3.4c-6.5-2.5-12.2-6.4-17-11.3c-5.3-5.4-9.3-11.6-11.7-18.8c-1.8-5.4-2.7-10.8-2.7-16.5c0-100,0-200,0-300c0-6.1,1.3-11.9,3.5-17.5c2.5-6.5,6.4-12.1,11.3-17c5.3-5.2,11.5-9.2,18.7-11.6c5.4-1.8,10.9-2.7,16.7-2.7c77.9,0,155.8,0,233.6,0c6,0,11.8,1.3,17.3,3.5c6.4,2.5,11.9,6.3,16.7,11.1c7.2,7.2,11.7,16,13.8,26c0.5,2.6,0.7,5.2,0.7,7.8c0,60.7,0,121.3,0,182C416.3,281.5,416.3,282.2,416.3,283z" />
+                            <path
+                                d="M212.6,183.2c-15.9-2.1-30.4-16.4-28.9-36.2c1.3-15.7,15-31.5,35.7-30.2c16,1,29.4,13.9,30.7,30.3c1.6,20.1-13.5,34.1-28.6,35.9c4.4,0.9,9.1,1.5,13.6,2.8c4.5,1.4,8.8,3.3,13,5.3c4.3,2,8.4,4.7,11.8,8.1c3.4,3.4,7.1,6.7,10,10.5c2.9,3.8,5.1,8,7.3,12.2c2.2,4.2,3.6,8.7,4.6,13.3c1,4.7,1.7,9.4,1.5,14.4c-44.3,0-88.5,0-133,0c0.2-17.5,6.1-32.6,18.1-45.3C180.4,191.6,195.2,184.7,212.6,183.2z" />
+                            <path
+                                d="M150.5,316.2c0-11.1,0-22,0-33c66.4,0,132.7,0,199.2,0c0,11,0,21.9,0,33C283.4,316.2,217,316.2,150.5,316.2z" />
+                            <path
+                                d="M150.5,382.7c0-11.1,0-22,0-33c66.4,0,132.7,0,199.2,0c0,11,0,21.9,0,33C283.4,382.7,217,382.7,150.5,382.7z" />
+                            <path
+                                d="M349.8,183.3c-11.1,0-22,0-33,0c0-11,0-22,0-33c11,0,22,0,33,0C349.8,161.2,349.8,172.2,349.8,183.3z" />
+                            <path
+                                d="M349.7,249.7c-11.1,0-22,0-33,0c0-11,0-22,0-33c11,0,21.9,0,33,0C349.7,227.6,349.7,238.6,349.7,249.7z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div>Generated with <a href="https://github.com/LeHuman/repo-scraper" target="_blank">Rust</a> and <a
+                    href="https://www.getzola.org/" target="_blank">Zola</a></div>
+        </div>
+    </div>
+    {% endblock sidebar %}
+
+    <div class="content container">
+        {% block content %}
+        {% set __page = get_page(path="./hello.md") %}
+        <div class="post">
+            <h1 class="post-title">{{ __page.title }}</h1>
+            {{ __page.content | safe }}
+        </div>
+        {% endblock content %}
+    </div>
+
+</body>
+
+</html>

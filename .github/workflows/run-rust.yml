@@ -1,0 +1,54 @@
+name: Run Rust
+on:
+  schedule:
+    - cron: '0 0 */14 * *' # Runs every two weeks
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: write
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        with:
+          path: ./.cache
+          key: cache-bin-data
+      - name: Install stable toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Build rust app and run # TODO: use published docker instead of building app each time
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: cargo run --release --bin website
+      - uses: prantlf/delete-cache-action@v3
+        with:
+          key: cache-bin-data
+        continue-on-error: true
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: ./.cache
+          key: cache-bin-data
+      - uses: zolacti/on@build
+        with:
+          root: ./zola
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './zola/public'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Delete artifact
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: github-pages

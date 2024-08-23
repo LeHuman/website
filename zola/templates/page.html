@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="post">
+    {% if page.date %}
+    <h1 class="post-title">
+        {% if page.extra.logo %}
+        <div class="logo">
+            <img src="{{page.extra.logo}}" alt="{{page.title}}">
+        </div>
+        {% endif%}
+        {{page.title | safe}}
+    </h1>
+    <span class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
+
+    {{ page.content | safe }}
+
+    {% if page.extra.highlight %}
+    <div class="logo">
+        <img src="{{page.extra.highlight}}" alt="Highlight">
+    </div>
+    {% endif%}
+
+    {% else %}
+    <h1 class="post-title">{{ page.title }}</h1>
+    {{ page.content | safe }}
+    {% endif%}
+</div>
+{% endblock content %}
