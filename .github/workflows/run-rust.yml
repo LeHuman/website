@@ -23,6 +23,8 @@ jobs:
       - name: Install stable toolchain
         uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+        with:
+          cache-all-crates: "true"
       - name: Build rust app and run # TODO: use published docker instead of building app each time
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
