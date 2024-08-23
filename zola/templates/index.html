@@ -12,10 +12,11 @@
     <title>{% block title %}{{ config.title }}{% endblock title %}</title>
 
     <!-- CSS -->
-    <!-- TODO: Fix css for sub-sections and pages -->
-    <link rel="stylesheet" href="print.css" media="print">
-    <link rel="stylesheet" href="poole.css">
-    <link rel="stylesheet" href="hyde.css">
+    {% block css %}
+    <link rel="stylesheet" href="{{ get_url(path="print.css")}}" media="print">
+    <link rel="stylesheet" href="{{ get_url(path="poole.css")}}">
+    <link rel="stylesheet" href="{{ get_url(path="hyde.css")}}">
+    {% endblock css %}
 
     {% if config.generate_feed %}
     <link rel="alternate" type={% if config.feed_filename=="atom.xml" %}"application/atom+xml"{% else
