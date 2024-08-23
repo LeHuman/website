@@ -29,7 +29,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let query =
             GHQuery::from_personal_token(env::var("GITHUB_TOKEN").expect("No Github token"));
 
-        let fetched = query.fetch_latest("LeHuman", 16).await?;
+        let fetched = query.fetch_latest("LeHuman", 64).await?;
 
         cache.repos.update(&fetched);
         if let Ok(colors) = colors {
