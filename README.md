@@ -1,6 +1,6 @@
 # website
 
-[![CI](https://github.com/LeHuman/website/workflows/CI/badge.svg)](https://github.com/LeHuman/website/actions)
+[![CD](https://github.com/LeHuman/website/workflows/CD/badge.svg)](https://github.com/LeHuman/website/actions)
 
 ## License
 

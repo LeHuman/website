@@ -1,4 +1,4 @@
-name: Run Rust
+name: CD
 on:
   schedule:
     - cron: '0 0 */14 * *' # Runs every two weeks
