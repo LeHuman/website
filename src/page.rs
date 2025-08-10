@@ -176,10 +176,28 @@ fn get_repo_page(repo: &Repo) -> (String, String) {
     metadata.insert("description", description.to_owned());
     metadata.insert("date", epoch_to_date(repo.last_update));
     if let Some(details) = &repo.details {
+        details.color.as_ref().and_then(|colors| {
+            if !colors.is_empty() {
+                extra.insert("color", format!("#{:x}", colors[0]))
+            } else {
+                None
+            }
+        });
         details
             .logo
             .as_ref()
             .and_then(|logo| extra.insert("logo", logo.to_owned()));
+        details.demo.as_ref().and_then(|demo| {
+            if [".mp4", ".webm", ".ogg"]
+                .iter()
+                .map(|ext| demo.ends_with(ext))
+                .any(|x| x)
+            {
+                extra.insert("demo_video", demo.to_owned())
+            } else {
+                extra.insert("demo", demo.to_owned())
+            }
+        });
         details
             .highlight
             .as_ref()
@@ -210,6 +228,7 @@ pub fn project(project: &Project) -> Paths {
     metadata.insert("title", title.to_owned());
     metadata.insert("sort_by", "title".to_string());
     metadata.insert("template", "project.html".to_string());
+    // TODO: demo background
     let _ = project.repo_main.as_ref().and_then(|r| {
         r.details.as_ref().and_then(|d| {
             d.logo

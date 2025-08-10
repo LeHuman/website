@@ -1,15 +1,14 @@
 use std::{env, fs};
 
 use reposcrape::{
-    color,
+    LocalSaveFile, LocalSaveFileCommon, color,
     date::Epoch,
     reposcrape::{
         cache::{ExpandedRepoCache, RepoScrapeCache, Update},
         query::{GHQuery, QueryInterface},
     },
-    LocalSaveFile, LocalSaveFileCommon,
 };
-use tracing::{info, Level};
+use tracing::{Level, info, trace};
 use tracing_subscriber::FmtSubscriber;
 
 #[cfg(feature = "dot-env")]
@@ -50,6 +49,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let expanded = ExpandedRepoCache::new(cache).await;
+
+    trace!("{}", expanded);
 
     let mut paths = page::Paths::default();
 

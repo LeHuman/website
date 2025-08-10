@@ -7,22 +7,46 @@
 </div>
 <div class="posts">
     {% for _page in section.pages %}
-    <div class="post">
-        <h1 class="post-title">
-            {% if _page.extra.logo %}
-            <div class="logo">
-                <a href="{{get_url(path=_page.path)}}"><img src="{{_page.extra.logo}}" alt="{{_page.title}}"></a>
-                <a href="{{get_url(path=_page.path)}}">
-                    {{_page.title}}
-                </a>
-            </div>
-            {% else %}
-            <a href="{{get_url(path=_page.path)}}">{{_page.title | safe}}</a>
-            {% endif%}
-        </h1>
+    <div class="post" style="position:relative; overflow:hidden;">
+        {% if _page.extra.demo_video %}
+        <div class="post-bg">
+            <video src="{{ page.extra.demo_video }}" preload="true" autoplay loop muted playsinline
+                style="width:100%;height:100%;object-fit:cover;">
+            </video>
+            <div class="post-bg-overlay" style="position:absolute; inset:0; background:rgba(0,0,0,0.4);"></div>
+        </div>
+        {% elif _page.extra.demo %}
+        <div class="post-bg">
+            <img src="{{ _page.extra.demo }}" alt="Demo background" style="width:100%;height:100%;object-fit:cover;">
+            <div class="post-bg-overlay" style="position:absolute; inset:0; background:rgba(0,0,0,0.4);"></div>
+        </div>
+        {% else%}
+        {% if _page.extra.color %}
+        <div class="post-bg" style="background-color: {{ _page.extra.color }};">
+        </div>
+        {% else %}
+        <div class="post-bg"
+            style="background: url(Placeholder.svg); background-size: cover; opacity: 0.7; filter: contrast(50%);">
+        </div>
+        {% endif %}
+        {% endif %}
 
-        <!-- TODO: show updated else date -->
-        <span class="post-date">{{ _page.date | date(format="%Y-%m-%d") }}</span>
+        {% if _page.extra.logo %}
+        <div class="logo">
+            <a href="{{get_url(path=_page.path)}}"><img src="{{_page.extra.logo}}" alt="{{_page.title}}"
+                    style="margin-bottom: 0;"></a>
+        </div>
+        {% else%}
+        <div style="padding: 4em;"></div>
+        {% endif%}
+
+        <div style="position:relative; z-index:1;" class="post-title-block">
+            <h1 class="post-title {% if _page.extra.logo %} logo {% endif %}">
+                <a href="{{get_url(path=_page.path)}}">{{_page.title | safe}}</a>
+            </h1>
+            <!-- TODO: show updated else date -->
+            <span class="post-date">{{ _page.date | date(format="%Y-%m-%d") }}</span>
+        </div>
     </div>
     {% endfor %}
 </div>
