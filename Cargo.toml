@@ -11,7 +11,7 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 chrono = "0.4.41"
-reposcrape = { version = "0.1.3", path = "../repo-scraper" }
+reposcrape = { version = "0.1.4" }
 slug = "0.1.6"
 tokio = "1.47.1"
 tracing = "0.1.41"
