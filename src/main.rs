@@ -12,22 +12,32 @@ use reposcrape::{
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
+#[cfg(feature = "dot-env")]
+use dotenvy::dotenv;
+
 mod page;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let subscriber = FmtSubscriber::builder()
-        .with_max_level(Level::INFO)
+        .with_max_level(Level::TRACE)
         .finish();
     tracing::subscriber::set_global_default(subscriber).expect("Setting default subscriber failed");
+
+    #[cfg(feature = "dot-env")]
+    {
+        if let Err(err) = dotenv() {
+            eprintln!("Warning: Could not load .env file: {}", err);
+        }
+    }
 
     let mut cache = RepoScrapeCache::load_file_or_default("./.cache");
 
     if cache.is_empty() || cache.repos.is_outdated() {
         info!("Fetching repos");
         let colors = color::fetch_language_colors().await;
-        let query =
-            GHQuery::from_personal_token(env::var("GITHUB_TOKEN").expect("No Github token"));
+        let gh_token = env::var("GITHUB_TOKEN").expect("No Github token");
+        let query = GHQuery::from_personal_token(gh_token);
 
         let fetched = query.fetch_latest("LeHuman", 64).await?;
 
