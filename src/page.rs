@@ -10,7 +10,6 @@ use reposcrape::{
     date::{Epoch, EpochType},
     reposcrape::{Project, Repo},
 };
-
 const STR_META: &str = "+++\n";
 
 const STR_DIR_ZOLA: &str = "zola/content/";
@@ -24,22 +23,38 @@ const STR_FILE_PROJECT_REPO: &str = "__repo_{}.md";
 const STR_FILE_PROJECT_MAIN_REPO: &str = "_index.md";
 const STR_FILE_REPO: &str = "__{}.md";
 
+type PageData = String;
 type MetaMap = HashMap<&'static str, String>;
 
 #[derive(Clone, Default, Debug)]
-pub struct Paths {
-    pub files: HashMap<PathBuf, String>,
+pub struct Page {
+    pub path: PathBuf,
+    pub data: PageData,
+}
+
+#[derive(Clone, Default, Debug)]
+pub struct PageCollection {
+    pub files: HashMap<PathBuf, PageData>,
     pub directories: HashSet<PathBuf>,
 }
 
-impl AddAssign for Paths {
+impl PageCollection {
+    pub fn insert(&mut self, mut page: Page) {
+        self.files
+            .insert(page.path.to_owned(), page.data.to_owned());
+        page.path.pop();
+        self.directories.insert(page.path);
+    }
+}
+
+impl AddAssign for PageCollection {
     fn add_assign(&mut self, rhs: Self) {
         self.files.extend(rhs.files);
         self.directories.extend(rhs.directories);
     }
 }
 
-impl Add for Paths {
+impl Add for PageCollection {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self::Output {
@@ -73,11 +88,6 @@ fn build_page(map: MetaMap, extra: Option<MetaMap>) -> String {
     result
 }
 
-// fn rfc3339_date(epoch: EpochType) -> Option<String> {
-//     let datetime: chrono::DateTime<chrono::Utc> = Epoch::to_rfc3339(epoch)?.parse().ok()?;
-//     Some(datetime.date_naive().to_string())
-// }
-
 fn epoch_to_date(epoch: EpochType) -> String {
     Epoch::to_rfc3339(epoch).unwrap_or(String::from("1970-1-1"))
 }
@@ -105,16 +115,8 @@ fn build_latest(title: String, update: String, path: String) -> String {
     build_page(metadata, None)
 }
 
-// #[test]
-// fn fds() {
-//     let mut dir: PathBuf = [STR_DIR_ZOLA, STR_DIR_PROJECTS].iter().collect();
-//     dir = dir.canonicalize().unwrap();
-//     dir.push("pmpi");
-//     println!("{:?}", dir);
-// }
-
-pub fn latest_project(project: &Project) -> Paths {
-    let mut result = Paths::default();
+pub fn latest_project(project: &Project) -> PageCollection {
+    let mut result = PageCollection::default();
     let title = project.name.to_owned();
     let page = build_latest(
         title.to_owned(),
@@ -132,31 +134,7 @@ pub fn latest_project(project: &Project) -> Paths {
     result
 }
 
-pub fn latest_repo(repo: &Repo) -> Paths {
-    let mut result = Paths::default();
-    let mut title = repo.name.to_owned();
-    if let Some(details) = &repo.details {
-        if let Some(set_title) = &details.title {
-            title = set_title.to_owned();
-        }
-    }
-    let page = build_latest(
-        title.to_owned(),
-        epoch_to_date(repo.last_update),
-        STR_DIR_REPOS.to_string() + &slugify(&title),
-    );
-
-    let mut dir: PathBuf = [STR_DIR_ZOLA, STR_DIR_LATEST].iter().collect();
-    dir = dir.canonicalize().unwrap();
-    result.directories.insert(dir.to_owned());
-
-    dir.push(STR_FILE_LATEST.replace("{}", &title));
-    result.files.insert(dir, page);
-
-    result
-}
-
-fn get_repo_page(repo: &Repo) -> (String, String) {
+fn get_repo_strings(repo: &Repo, latest: bool) -> (String, String) {
     let mut metadata: MetaMap = HashMap::new();
     let mut extra: MetaMap = HashMap::new();
 
@@ -175,6 +153,12 @@ fn get_repo_page(repo: &Repo) -> (String, String) {
     metadata.insert("title", title.to_owned());
     metadata.insert("description", description.to_owned());
     metadata.insert("date", epoch_to_date(repo.last_update));
+
+    if latest {
+        let path = String::from("./") + STR_DIR_REPOS + &slugify(&title);
+        metadata.insert("path", path);
+    }
+
     if let Some(details) = &repo.details {
         details.color.as_ref().and_then(|colors| {
             if !colors.is_empty() {
@@ -212,8 +196,8 @@ fn get_repo_page(repo: &Repo) -> (String, String) {
     (title, page)
 }
 
-pub fn project(project: &Project) -> Paths {
-    let mut result = Paths::default();
+pub fn project(project: &Project) -> PageCollection {
+    let mut result = PageCollection::default();
     let mut extra: MetaMap = HashMap::new();
     let title = project.name.to_owned();
     let slug = slugify(&title);
@@ -228,7 +212,7 @@ pub fn project(project: &Project) -> Paths {
     metadata.insert("title", title.to_owned());
     metadata.insert("sort_by", "title".to_string());
     metadata.insert("template", "project.html".to_string());
-    // TODO: demo background
+
     let _ = project.repo_main.as_ref().and_then(|r| {
         r.details.as_ref().and_then(|d| {
             d.logo
@@ -262,7 +246,7 @@ pub fn project(project: &Project) -> Paths {
     }
 
     for repo in &project.repo_sub {
-        let (title, page) = get_repo_page(repo);
+        let (title, page) = get_repo_strings(repo, false);
         dir.push(STR_FILE_PROJECT_REPO.replace("{}", &title));
         result.files.insert(dir.to_owned(), page);
         dir.pop();
@@ -271,16 +255,22 @@ pub fn project(project: &Project) -> Paths {
     result
 }
 
-pub fn repo(repo: &Repo) -> Paths {
-    let (title, page) = get_repo_page(repo);
+pub fn repo(repo: &Repo) -> Page {
+    let (title, data) = get_repo_strings(repo, false);
 
-    let mut result = Paths::default();
-    let mut dir: PathBuf = [STR_DIR_ZOLA, STR_DIR_REPOS].iter().collect();
-    dir = dir.canonicalize().unwrap();
-    result.directories.insert(dir.to_owned());
+    let mut path: PathBuf = [STR_DIR_ZOLA, STR_DIR_REPOS].iter().collect();
+    path = path.canonicalize().unwrap();
+    path.push(STR_FILE_REPO.replace("{}", &title));
 
-    dir.push(STR_FILE_REPO.replace("{}", &title));
-    result.files.insert(dir, page);
+    Page { path, data }
+}
 
-    result
+pub fn latest_repo(repo: &Repo) -> Page {
+    let (title, data) = get_repo_strings(repo, true);
+
+    let mut path: PathBuf = [STR_DIR_ZOLA, STR_DIR_LATEST].iter().collect();
+    path = path.canonicalize().unwrap();
+    path.push(STR_FILE_LATEST.replace("{}", &title));
+
+    Page { path, data }
 }

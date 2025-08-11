@@ -52,32 +52,31 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     trace!("{}", expanded);
 
-    let mut paths = page::Paths::default();
+    let mut pages = page::PageCollection::default();
 
     let date = Epoch::get_local();
 
     for (_name, project) in &expanded.projects {
-        paths += page::project(project);
+        pages += page::project(project);
         if date - page::get_project_epoch(project) < 2629743000 {
-            paths += page::latest_project(project);
+            pages += page::latest_project(project);
         }
     }
 
     for (_name, repo) in &expanded.repos {
         if repo.details.is_some() {
-            paths += page::repo(repo);
-
             if date - repo.last_update < 2629743000 {
-                paths += page::latest_repo(repo);
+                pages.insert(page::latest_repo(repo));
             }
+            pages.insert(page::repo(repo));
         }
     }
 
-    for path in &paths.directories {
+    for path in &pages.directories {
         let _ = fs::create_dir_all(path);
     }
 
-    for (path, data) in &paths.files {
+    for (path, data) in &pages.files {
         let _ = fs::write(path, data);
     }
 
