@@ -359,6 +359,18 @@ tbody tr:nth-child(odd) th {
     padding: 0.4em 0.0em 0.7em 0.8em;
 }
 
+.header-icon {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    opacity: 0.6;
+    width: 0.8em;
+    height: 0.8em;
+}
+
+.header-icon:hover {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
 .page,
 .post {
     margin-bottom: 2em;

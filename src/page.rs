@@ -152,6 +152,7 @@ fn get_repo_strings(repo: &Repo, latest: bool) -> (String, String) {
 
     metadata.insert("title", title.to_owned());
     metadata.insert("description", description.to_owned());
+    extra.insert("url", repo.url.to_owned());
     metadata.insert("date", epoch_to_date(repo.last_update));
 
     if latest {
