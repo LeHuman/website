@@ -57,6 +57,20 @@ html {
  * out above content in mobile and later moves to the side with wider viewports.
  */
 
+.blink {
+    animation: blinker 1s step-start infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+.title-cursor {
+    visibility: hidden;
+}
+
 .sidebar {
     text-align: center;
     padding: 2rem 1rem;
@@ -71,6 +85,12 @@ html {
         bottom: 0;
         width: 18rem;
         text-align: left;
+    }
+
+    .title-cursor {
+        visibility: visible;
+        position: absolute;
+        padding-left: 32%;
     }
 }
 
@@ -168,8 +188,12 @@ a.sidebar-nav-item:focus {
 }
 
 .sidebar-nav-item.active {
-    font-weight: normal;
+    font-weight: bold;
 }
+
+// .sidebar-nav-item.active a {
+//     text-decoration: underline;
+// }
 
 /* Sticky sidebar
  *

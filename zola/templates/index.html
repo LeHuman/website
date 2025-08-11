@@ -9,15 +9,15 @@
     <!-- viewport-fit=cover is to support iPhone X rounded corners and notch in landscape-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
 
-    <title>{% block title %}{{ config.title }}{% endblock title %}</title>    
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/LeHuman/website/refs/heads/main/zola/static/favicon.ico">
+    <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://raw.githubusercontent.com/LeHuman/website/refs/heads/main/zola/static/favicon.ico">
 
 
-    <!-- CSS -->
     {% block css %}
-    <link rel="stylesheet" href="{{ get_url(path="print.css")}}" media="print">
-    <link rel="stylesheet" href="{{ get_url(path="poole.css")}}">
-    <link rel="stylesheet" href="{{ get_url(path="hyde.css")}}">
+    <link rel="stylesheet" href="{{ get_url(path='print.css')}}" media="print">
+    <link rel="stylesheet" href="{{ get_url(path='poole.css')}}">
+    <link rel="stylesheet" href="{{ get_url(path='hyde.css')}}">
     {% endblock css %}
 
     {% if config.generate_feed %}
@@ -36,7 +36,12 @@
             <div class="sidebar-about">
                 {% block sidebar_about %}
                 <a href="{{ config.base_url }}">
-                    <h1>{{ config.title }}</h1>
+                    <h1>
+                        {% if current_path and current_path == "/" %}
+                        <div class="blink title-cursor"><</div>
+                        {% endif %}
+                        {{ config.title }}
+                    </h1>
                 </a>
                 {% if config.description %}
                 <p class="lead">{{config.description}}</p>
@@ -46,37 +51,48 @@
 
             <ul class="sidebar-nav">
                 {% block sidebar_nav %}
-
                 {% set __item = get_page(path="./hello.md") %}
-                <li class="sidebar-nav-item">
-                    <a href="{{get_url(path=__item.path)}}">{{__item.title}}</a>
+                <li class="sidebar-nav-item {% if current_path and current_path == __item.path %}active{% endif %}">
+                    <a href="{{ get_url(path=__item.path) }}">
+                        {{ __item.title }}{% if current_path and current_path == __item.path %} <a class="blink"><</a>{% endif %}
+                    </a>
                 </li>
                 {% set __section = get_section(path="latest/_index.md") %}
-                <li class="sidebar-nav-item">
-                    <a href="{{get_url(path=__section.path)}}">{{__section.title}}</a>
+                <li class="sidebar-nav-item {% if current_path and current_path == __section.path %}active{% endif %}">
+                    <a href="{{ get_url(path=__section.path) }}">
+                        {{ __section.title }}{% if current_path and current_path == __section.path %} <a class="blink"><</a>{% endif %}
+                        </a>
                 </li>
                 {% set __section = get_section(path="projects/_index.md") %}
-                <li class="sidebar-nav-item">
-                    <a href="{{get_url(path=__section.path)}}">{{__section.title}}</a>
+                <li class="sidebar-nav-item {% if current_path and current_path == __section.path %}active{% endif %}">
+                    <a href="{{ get_url(path=__section.path) }}">
+                        {{ __section.title }}{% if current_path and current_path == __section.path %} <a class="blink"><</a>{% endif %}
+                        </a>
                 </li>
                 {% set __section = get_section(path="repos/_index.md") %}
-                <li class="sidebar-nav-item">
-                    <a href="{{get_url(path=__section.path)}}">{{__section.title}}</a>
+                <li class="sidebar-nav-item {% if current_path and current_path == __section.path %}active{% endif %}">
+                    <a href="{{ get_url(path=__section.path) }}">
+                        {{ __section.title }}{% if current_path and current_path == __section.path %} <a class="blink"><</a>{% endif %}
+                        </a>
                 </li>
                 {% set __item = get_page(path="./contact.md") %}
-                <li class="sidebar-nav-item">
-                    <a href="{{get_url(path=__item.path)}}">{{__item.title}}</a>
+                <li class="sidebar-nav-item {% if current_path and current_path == __item.path %}active{% endif %}">
+                    <a href="{{ get_url(path=__item.path) }}">
+                        {{ __item.title }}{% if current_path and current_path == __item.path %} <a class="blink"><</a>{% endif %}
+                        </a>
                 </li>
                 {% set __item = get_page(path="./about.md") %}
-                <li class="sidebar-nav-item">
-                    <a href="{{get_url(path=__item.path)}}">{{__item.title}}</a>
+                <li class="sidebar-nav-item {% if current_path and current_path == __item.path %}active{% endif %}">
+                    <a href="{{ get_url(path=__item.path) }}">
+                        {{ __item.title }}{% if current_path and current_path == __item.path %} <a class="blink"><</a>{% endif %}
+                        </a>
                 </li>
-
                 {% for link in config.extra.hyde_links %}
                 <li class="sidebar-nav-item"><a href="{{link.url}}">{{link.name}}</a></li>
                 {% endfor %}
                 {% endblock sidebar_nav %}
             </ul>
+
         </div>
         <div class="sidebar-minor {% if config.extra.hyde_sticky %}sidebar-minor-sticky{% endif %}">
             <div class="sidebar-icon-row">
