@@ -15,17 +15,20 @@
 </div>
 {% endif %}
 
-<div class="post" style="position:relative;overflow:hidden;">
+<div class="post" style="position:relative;">
     <div style="position:relative; z-index:1;">
         {% if page.date %}
-        <h1 class="post-title">
-            {% if page.extra.logo %}
-            <div class="logo">
-                <img src="{{page.extra.logo}}" alt="{{page.title}}">
-            </div>
-            {% endif%}
+        <h1 class="post-title" style="font-size: 8em;">
             <div style="display: flex; align-items: center; gap: 0.1em;">
-                {{page.title | safe}}
+                {% if page.extra.logo %}
+                <div class="logo">
+                    <img src="{{page.extra.logo}}" style="width: 100%; margin-bottom: 1.2em;" alt="{{page.title}}">
+                </div>
+                {% else %}
+                <div style=" margin-left: -0.04em;">
+                    {{page.title | safe}}
+                </div>
+                {% endif %}
                 {% if page.extra.url %}
                 <a href="{{page.extra.url}}" target="_blank">
                     <svg class="header-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -39,14 +42,14 @@
         </h1>
 
         {% if page.extra.keywords %}
-        <div class="chips">
+        <div class="chips" style="font-size: 3em;">
             {% for keyword in page.extra.keywords %}
             <span class="chip" style="background-color: {{ keyword.color }};">{{ keyword.name }}</span>
             {% endfor %}
         </div>
         {% endif %}
 
-        <span class="page-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
+        <span class="page-date" style="font-size: 1.5em;">{{ page.date | date(format="%Y-%m-%d") }}</span>
 
         {{ page.content | safe }}
 
