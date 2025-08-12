@@ -174,6 +174,7 @@ fn get_repo_strings(lang_colors: &ColorMap, repo: &Repo, latest: bool) -> (Strin
 
     let mut title = repo.name.to_owned();
     let mut description = String::from("No Description");
+    let mut why: Option<String> = None;
 
     if let Some(details) = &repo.details {
         if let Some(set_title) = &details.title {
@@ -181,6 +182,9 @@ fn get_repo_strings(lang_colors: &ColorMap, repo: &Repo, latest: bool) -> (Strin
         }
         if let Some(desc) = &details.description {
             description = desc.to_owned();
+        }
+        if let Some(why_str) = &details.why {
+            why = Some(String::from("\n\n") + &why_str.to_owned());
         }
     }
 
@@ -247,6 +251,11 @@ fn get_repo_strings(lang_colors: &ColorMap, repo: &Repo, latest: bool) -> (Strin
     );
 
     page += &description;
+
+    if let Some(why) = why {
+        page += &why;
+    }
+
     page += "\n";
 
     (title, page)

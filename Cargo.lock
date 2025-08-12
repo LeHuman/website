@@ -1356,6 +1356,8 @@ checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
 [[package]]
 name = "reposcrape"
 version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "97300890a7875848dc6d3add15cc086d9c9ad650be91b0caa220ac0b066ffb6a"
 dependencies = [
  "chrono",
  "localsavefile",
