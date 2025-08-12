@@ -30,6 +30,29 @@
 </head>
 
 <body class="{{ config.extra.hyde_theme }} {% if config.extra.hyde_reverse %}layout-reverse{% endif %}">
+    {% if page and (page.extra.demo_video or page.extra.demo) %}
+    <div class="background-stripes">
+        {% if page.extra.color %}
+        <div class="translucent stripe stripe-1" style="background-color: {{ page.extra.color }};"></div>
+        <div class="stripe stripe-1" style="opacity: 0%;"></div>
+        {% endif %}
+        <div class="translucent stripe stripe-1"></div>
+        <div class="translucent stripe stripe-2"></div>
+        <div class="translucent stripe stripe-3"></div>
+        <div class="translucent stripe stripe-4"></div>
+    </div>
+    {% else %}
+    <div class="background-stripes">
+        {% if page and page.extra.color %}
+        <div class="stripe stripe-1" style="background-color: {{ page.extra.color }};"></div>
+        <div class="stripe stripe-1" style="opacity: 0%;"></div>
+        {% endif %}
+        <div class="stripe stripe-1"></div>
+        <div class="stripe stripe-2"></div>
+        <div class="stripe stripe-3"></div>
+        <div class="stripe stripe-4"></div>
+    </div>
+    {% endif %}
     {% block sidebar %}
     <div class="sidebar">
         <div class="container {% if config.extra.hyde_sticky %}sidebar-sticky{% endif %}">

@@ -18,11 +18,11 @@
 <div class="post" style="position:relative;">
     <div style="position:relative; z-index:1;">
         {% if page.date %}
-        <h1 class="post-title" style="font-size: 8em;">
+        <h1 class="post-title" style="font-size: max(2rem, 8vw);">
             <div style="display: flex; align-items: center; gap: 0.1em;">
                 {% if page.extra.logo %}
                 <div class="logo">
-                    <img src="{{page.extra.logo}}" style="width: 100%; margin-bottom: 1.2em;" alt="{{page.title}}">
+                    <img src="{{page.extra.logo}}" style="width: 100%; margin-bottom: 1.6em;" alt="{{page.title}}">
                 </div>
                 {% else %}
                 <div style=" margin-left: -0.04em;">
@@ -42,7 +42,7 @@
         </h1>
 
         {% if page.extra.keywords %}
-        <div class="chips" style="font-size: 3em;">
+        <div class="chips" style="font-size: max(1rem, 4vw);">
             {% for keyword in page.extra.keywords %}
             <span class="chip" style="background-color: {{ keyword.color }};">{{ keyword.name }}</span>
             {% endfor %}

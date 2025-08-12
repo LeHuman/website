@@ -56,6 +56,7 @@ html {
 
 @media (min-width: 38em) {
     html {
+        overflow-y: scroll;
         font-size: 20px;
     }
 }
@@ -340,7 +341,7 @@ tbody tr:nth-child(odd) th {
     top: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1;
+    z-index: -2;
     object-fit: cover;
 }
 
@@ -388,6 +389,44 @@ tbody tr:nth-child(odd) th {
     border-radius: 0.5em;
     // text-transform: uppercase;
     white-space: nowrap;
+}
+
+.translucent {
+    opacity: 60%;
+}
+
+.background-stripes {
+    position: fixed;
+    top: 0;
+    right: calc(10% + env(safe-area-inset-right)); /* Adjust for scrollbar and safe area */
+    /* Distance from the right side of the screen */
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    z-index: -1;
+    /* Place behind all other content */
+}
+
+.stripe {
+    width: 2.5em;
+    height: 100%;
+    filter: contrast(80%);
+}
+
+.stripe-1 {
+    background-color: #0045e5;
+}
+
+.stripe-2 {
+    background-color: #bf1932;
+}
+
+.stripe-3 {
+    background-color: #e1b000;
+}
+
+.stripe-4 {
+    background-color: #009900;
 }
 
 .page,
