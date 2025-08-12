@@ -37,7 +37,16 @@
                 {% endif %}
             </div>
         </h1>
-        <span class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
+
+        {% if page.extra.keywords %}
+        <div class="chips">
+            {% for keyword in page.extra.keywords %}
+            <span class="chip" style="background-color: {{ keyword.color }};">{{ keyword.name }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <span class="page-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
 
         {{ page.content | safe }}
 

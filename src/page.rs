@@ -24,6 +24,7 @@ const STR_FILE_PROJECT_MAIN_REPO: &str = "_index.md";
 const STR_FILE_REPO: &str = "__{}.md";
 
 type PageData = String;
+type ColorMap = HashMap<String, String>;
 type MetaMap = HashMap<&'static str, String>;
 
 #[derive(Clone, Default, Debug)]
@@ -65,11 +66,11 @@ impl Add for PageCollection {
     }
 }
 
-fn build_page(map: MetaMap, extra: Option<MetaMap>) -> String {
+fn build_page(map: MetaMap, extra: Option<MetaMap>, ignore: Option<HashSet<String>>) -> String {
     let mut result = String::from(STR_META);
     for (k, v) in map.iter() {
-        if *k == "date" {
-            result += &format!("date = {}\n", v);
+        if ignore.as_ref().is_some_and(|x| x.contains(k.to_owned())) {
+            result += &format!("{} = {}\n", k, v);
         } else {
             result += &format!("{} = \"{}\"\n", k, v);
         }
@@ -79,7 +80,11 @@ fn build_page(map: MetaMap, extra: Option<MetaMap>) -> String {
         if !extra.is_empty() {
             result += "[extra]\n";
             for (k, v) in extra.iter() {
-                result += &format!("{} = \"{}\"\n", k, v);
+                if ignore.as_ref().is_some_and(|x| x.contains(k.to_owned())) {
+                    result += &format!("{} = {}\n", k, v);
+                } else {
+                    result += &format!("{} = \"{}\"\n", k, v);
+                }
             }
         }
     }
@@ -112,7 +117,11 @@ fn build_latest(title: String, update: String, path: String) -> String {
     metadata.insert("date", update); // Use "updated" instead?
     metadata.insert("path", String::from("./") + &path);
 
-    build_page(metadata, None)
+    build_page(
+        metadata,
+        None,
+        Some(HashSet::from(["date", "keywords"].map(|s| String::from(s)))),
+    )
 }
 
 pub fn latest_project(project: &Project) -> PageCollection {
@@ -134,7 +143,32 @@ pub fn latest_project(project: &Project) -> PageCollection {
     result
 }
 
-fn get_repo_strings(repo: &Repo, latest: bool) -> (String, String) {
+fn get_language_string(
+    lang_color_map: &HashMap<String, String>,
+    languages: &Vec<String>,
+) -> String {
+    let mut entries = Vec::new();
+
+    for lang in languages {
+        match lang_color_map.get(lang) {
+            Some(color) => {
+                entries.push(format!("{{ name = \"{}\", color = \"{}\" }}", lang, color));
+            }
+            None => match lang_color_map.get(&lang.to_lowercase()) {
+                Some(color) => {
+                    entries.push(format!("{{ name = \"{}\", color = \"{}\" }}", lang, color));
+                }
+                None => {
+                    entries.push(format!("{{ name = \"{}\", color = \"#cfcfcf\" }}", lang));
+                }
+            },
+        }
+    }
+
+    format!("[{}]", entries.join(","))
+}
+
+fn get_repo_strings(lang_colors: &ColorMap, repo: &Repo, latest: bool) -> (String, String) {
     let mut metadata: MetaMap = HashMap::new();
     let mut extra: MetaMap = HashMap::new();
 
@@ -161,6 +195,20 @@ fn get_repo_strings(repo: &Repo, latest: bool) -> (String, String) {
     }
 
     if let Some(details) = &repo.details {
+        let mut keywords = Vec::new();
+
+        if let Some(technology) = &details.technology {
+            keywords.extend(technology.to_owned());
+        }
+
+        if let Some(languages) = &details.languages {
+            keywords.extend(languages.to_owned());
+        }
+
+        if !keywords.is_empty() {
+            extra.insert("keywords", get_language_string(lang_colors, &keywords));
+        }
+
         details.color.as_ref().and_then(|colors| {
             if !colors.is_empty() {
                 extra.insert("color", format!("#{:x}", colors[0]))
@@ -168,10 +216,12 @@ fn get_repo_strings(repo: &Repo, latest: bool) -> (String, String) {
                 None
             }
         });
+
         details
             .logo
             .as_ref()
             .and_then(|logo| extra.insert("logo", logo.to_owned()));
+
         details.demo.as_ref().and_then(|demo| {
             if [".mp4", ".webm", ".ogg"]
                 .iter()
@@ -183,13 +233,18 @@ fn get_repo_strings(repo: &Repo, latest: bool) -> (String, String) {
                 extra.insert("demo", demo.to_owned())
             }
         });
+
         details
             .highlight
             .as_ref()
             .and_then(|h| extra.insert("highlight", h.to_owned()));
     }
 
-    let mut page = build_page(metadata, Some(extra));
+    let mut page = build_page(
+        metadata,
+        Some(extra),
+        Some(HashSet::from(["date", "keywords"].map(|s| String::from(s)))),
+    );
 
     page += &description;
     page += "\n";
@@ -197,7 +252,7 @@ fn get_repo_strings(repo: &Repo, latest: bool) -> (String, String) {
     (title, page)
 }
 
-pub fn project(project: &Project) -> PageCollection {
+pub fn project(lang_colors: &ColorMap, project: &Project) -> PageCollection {
     let mut result = PageCollection::default();
     let mut extra: MetaMap = HashMap::new();
     let title = project.name.to_owned();
@@ -207,7 +262,11 @@ pub fn project(project: &Project) -> PageCollection {
     metadata.insert("title", slug.to_owned());
     metadata.insert("date", epoch_to_date(get_project_epoch(project)));
     metadata.insert("template", String::from("404.html"));
-    let page = build_page(metadata, None);
+    let page = build_page(
+        metadata,
+        None,
+        Some(HashSet::from(["date", "keywords"].map(|s| String::from(s)))),
+    );
 
     let mut metadata: MetaMap = HashMap::new();
     metadata.insert("title", title.to_owned());
@@ -221,7 +280,11 @@ pub fn project(project: &Project) -> PageCollection {
                 .and_then(|l| extra.insert("logo", l.to_owned()))
         })
     });
-    let mut index_page = build_page(metadata, Some(extra));
+    let mut index_page = build_page(
+        metadata,
+        Some(extra),
+        Some(HashSet::from(["date", "keywords"].map(|s| String::from(s)))),
+    );
 
     let mut dir: PathBuf = [STR_DIR_ZOLA, STR_DIR_PROJECTS].iter().collect();
     dir = dir.canonicalize().unwrap();
@@ -247,7 +310,7 @@ pub fn project(project: &Project) -> PageCollection {
     }
 
     for repo in &project.repo_sub {
-        let (title, page) = get_repo_strings(repo, false);
+        let (title, page) = get_repo_strings(lang_colors, repo, false);
         dir.push(STR_FILE_PROJECT_REPO.replace("{}", &title));
         result.files.insert(dir.to_owned(), page);
         dir.pop();
@@ -256,8 +319,8 @@ pub fn project(project: &Project) -> PageCollection {
     result
 }
 
-pub fn repo(repo: &Repo) -> Page {
-    let (title, data) = get_repo_strings(repo, false);
+pub fn repo(lang_colors: &ColorMap, repo: &Repo) -> Page {
+    let (title, data) = get_repo_strings(lang_colors, repo, false);
 
     let mut path: PathBuf = [STR_DIR_ZOLA, STR_DIR_REPOS].iter().collect();
     path = path.canonicalize().unwrap();
@@ -266,8 +329,8 @@ pub fn repo(repo: &Repo) -> Page {
     Page { path, data }
 }
 
-pub fn latest_repo(repo: &Repo) -> Page {
-    let (title, data) = get_repo_strings(repo, true);
+pub fn latest_repo(lang_colors: &ColorMap, repo: &Repo) -> Page {
+    let (title, data) = get_repo_strings(lang_colors, repo, true);
 
     let mut path: PathBuf = [STR_DIR_ZOLA, STR_DIR_LATEST].iter().collect();
     path = path.canonicalize().unwrap();

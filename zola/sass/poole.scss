@@ -371,6 +371,25 @@ tbody tr:nth-child(odd) th {
     opacity: 1;
 }
 
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin-top: -0.3em;
+    margin-bottom: 0.3em;
+}
+
+.chip {
+    display: inline-block;
+    padding: 0.3em 0.6em;
+    font-size: 0.6em;
+    // font-weight: bold;
+    color: #0b0b0b;
+    border-radius: 12px;
+    // text-transform: uppercase;
+    white-space: nowrap;
+}
+
 .page,
 .post {
     margin-bottom: 2em;
@@ -423,10 +442,14 @@ p em {
 }
 
 /* Meta data line below post title */
+.page-date {
+    display: block;
+    margin-bottom: 1rem;
+    color: #666666;
+}
+
 .post-date {
     display: block;
-    margin-top: -.5rem;
-    // margin-bottom: 1rem;
     color: #666666;
 }
 

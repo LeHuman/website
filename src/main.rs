@@ -48,6 +48,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         cache.save_file("./.cache")?;
     }
 
+    let lang_color_map = cache.colors.data.clone();
     let expanded = ExpandedRepoCache::new(cache).await;
 
     trace!("{}", expanded);
@@ -57,7 +58,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let date = Epoch::get_local();
 
     for (_name, project) in &expanded.projects {
-        pages += page::project(project);
+        pages += page::project(&lang_color_map, project);
         if date - page::get_project_epoch(project) < 2629743000 {
             pages += page::latest_project(project);
         }
@@ -66,9 +67,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     for (_name, repo) in &expanded.repos {
         if repo.details.is_some() {
             if date - repo.last_update < 2629743000 {
-                pages.insert(page::latest_repo(repo));
+                pages.insert(page::latest_repo(&lang_color_map, repo));
             }
-            pages.insert(page::repo(repo));
+            pages.insert(page::repo(&lang_color_map, repo));
         }
     }
 
