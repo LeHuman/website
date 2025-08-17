@@ -2,8 +2,25 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "rust: cargo build",
             "type": "cargo",
             "command": "build",
+            "presentation": {
+                "echo": true,
+                "group": "rust",
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "options": {
+                "statusbar": {
+                    "detail": "rust: cargo build",
+                    "label": "$(tools)",
+                    "color": "#539d12"
+                }
+            },
             "args": [
                 "--features",
                 "dot-env"
@@ -15,7 +32,83 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "label": "rust: cargo build"
+        },
+        {
+            "label": "rust: cargo run",
+            "type": "cargo",
+            "command": "run",
+            "presentation": {
+                "echo": true,
+                "group": "rust",
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "options": {
+                "statusbar": {
+                    "detail": "rust: cargo run",
+                    "label": "$(zap)",
+                    "color": "#9d9d12"
+                }
+            },
+            "args": [
+                "--features",
+                "dot-env"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "dependsOn": [
+                "zola clear"
+            ]
+        },
+        {
+            "label": "zola serve",
+            "type": "shell",
+            "command": "zola serve",
+            "presentation": {
+                "echo": true,
+                "group": "zola",
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "options": {
+                "cwd": "zola",
+                "statusbar": {
+                    "detail": "zola serve",
+                    "label": "$(globe)",
+                    "color": "#1958c5"
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "zola clear",
+            "type": "shell",
+            "command": "git clean -xdf content",
+            "presentation": {
+                "echo": true,
+                "group": "zola",
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "options": {
+                "cwd": "zola",
+                "statusbar": {
+                    "detail": "zola clear",
+                    "label": "$(issue-draft)",
+                    "color": "#c51941"
+                }
+            },
+            "problemMatcher": []
         }
     ]
 }
