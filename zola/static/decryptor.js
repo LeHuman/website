@@ -1,11 +1,8 @@
 // decryptor.js
-// Client-side AES decryption of hidden content with WebCrypto API
-// Supports inline ciphertext (data-ciphertext + data-iv)
-// OR external JSON (data-secret="/path/to.json")
+// Client-side AES decryption for text, links, images, PDFs, and generic downloads.
+// Supports inline (data-ciphertext + data-iv) OR external JSON (data-secret="/path.json").
+// JSON format: { "iv": "<hex>", "ct": "<hex>" }
 
-/**
- * Convert a hex string to Uint8Array.
- */
 function hexToBytes(hex) {
     const bytes = new Uint8Array(hex.length / 2);
     for (let i = 0; i < hex.length; i += 2) {
@@ -14,86 +11,54 @@ function hexToBytes(hex) {
     return bytes;
 }
 
-/**
- * Import a raw AES key from hex string.
- */
 async function importKey(hexKey) {
     const keyBytes = hexToBytes(hexKey);
-    return crypto.subtle.importKey("raw", keyBytes, { name: "AES-CBC" }, false, [
-        "decrypt",
-    ]);
+    return crypto.subtle.importKey("raw", keyBytes, { name: "AES-CBC" }, false, ["decrypt"]);
 }
 
-/**
- * Decrypt a ciphertext given hex IV + hex CT.
- */
 async function decryptData(key, ivHex, ctHex) {
     const iv = hexToBytes(ivHex);
     const ct = hexToBytes(ctHex);
-    const plainBuffer = await crypto.subtle.decrypt(
-        { name: "AES-CBC", iv },
-        key,
-        ct
-    );
+    const plainBuffer = await crypto.subtle.decrypt({ name: "AES-CBC", iv }, key, ct);
     return new Uint8Array(plainBuffer);
 }
 
-/**
- * Load ciphertext from element.
- * Priority: external JSON if data-secret is present,
- * otherwise use inline data-ciphertext + data-iv.
- */
+// Load ciphertext either from external JSON or inline data-attrs.
 async function getCipherData(el) {
     if (el.dataset.secret) {
-        const resp = await fetch(el.dataset.secret);
+        const resp = await fetch(el.dataset.secret, { credentials: "same-origin" });
+        if (!resp.ok) throw new Error(`Failed to fetch secret: ${resp.status}`);
         const { iv, ct } = await resp.json();
+        if (!iv || !ct) throw new Error("Secret JSON missing iv/ct");
         return { iv, ct };
     } else if (el.dataset.ciphertext && el.dataset.iv) {
-        return {
-            iv: el.dataset.iv,
-            ct: el.dataset.ciphertext,
-        };
-    } else {
-        throw new Error("No ciphertext/iv or secret JSON found for element");
+        return { iv: el.dataset.iv, ct: el.dataset.ciphertext };
     }
+    throw new Error("No ciphertext/iv or data-secret on element");
 }
 
-/**
- * Try to decrypt and reveal a text element.
- */
+// --- Reveal helpers ---
+
 async function revealText(el, key) {
     try {
         const { iv, ct } = await getCipherData(el);
         const data = await decryptData(key, iv, ct);
-        const text = new TextDecoder().decode(data);
-        el.textContent = text;
+        el.textContent = new TextDecoder().decode(data);
         el.style.display = "";
-    } catch (err) {
-        console.warn("Text decryption failed:", err);
-    }
+    } catch (e) { console.warn("Text decrypt failed:", e); }
 }
 
-/**
- * Try to decrypt and reveal a link element.
- */
 async function revealLink(el, key) {
     try {
         const { iv, ct } = await getCipherData(el);
         const data = await decryptData(key, iv, ct);
         const href = new TextDecoder().decode(data);
         el.href = href;
-        if (!el.textContent.trim() && el.dataset.keep === undefined) {
-            el.textContent = "Secret Link";
-        }
+        if (!el.textContent.trim() && el.dataset.keep === undefined) el.textContent = "Secret Link";
         el.style.display = "";
-    } catch (err) {
-        console.warn("Link decryption failed:", err);
-    }
+    } catch (e) { console.warn("Link decrypt failed:", e); }
 }
 
-/**
- * Try to decrypt and reveal an image element.
- */
 async function revealImage(el, key, mimeType = "image/png") {
     try {
         const { iv, ct } = await getCipherData(el);
@@ -101,44 +66,80 @@ async function revealImage(el, key, mimeType = "image/png") {
         const blob = new Blob([data], { type: mimeType });
         el.src = URL.createObjectURL(blob);
         el.style.display = "";
-    } catch (err) {
-        console.warn("Image decryption failed:", err);
-    }
+    } catch (e) { console.warn("Image decrypt failed:", e); }
 }
 
-/**
- * Main entry point — check URL, decrypt and reveal items.
- *
- * config = {
- *   texts: ["id1", "id2"],
- *   links: ["id3"],
- *   images: [{ id: "img1", mimeType: "image/png" }]
- * }
- */
+// View PDF inline via <iframe> or <object>
+async function revealPdf(el, key) {
+    try {
+        const { iv, ct } = await getCipherData(el);
+        const data = await decryptData(key, iv, ct);
+        const blob = new Blob([data], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+
+        // Works for <iframe>, <object>, or <embed>
+        if ("src" in el) {
+            el.src = url;
+        } else if (el.tagName.toLowerCase() === "object") {
+            el.setAttribute("data", url);
+            el.setAttribute("type", "application/pdf");
+        }
+        el.style.display = "";
+    } catch (e) { console.warn("PDF decrypt failed:", e); }
+}
+
+// Create a download link for any binary (including PDFs)
+async function revealDownload(el, key, opts = {}) {
+    const { filename = "download.bin", mimeType = "application/octet-stream" } = opts;
+    try {
+        const { iv, ct } = await getCipherData(el);
+        const data = await decryptData(key, iv, ct);
+        const blob = new Blob([data], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+
+        el.href = url;
+        el.download = filename;
+        if (!el.textContent.trim() && el.dataset.keep === undefined) el.textContent = `Download ${filename}`;
+        el.style.display = "";
+    } catch (e) { console.warn("Download decrypt failed:", e); }
+}
+
+// --- Entry point ---
+// Reads key from URL (?key=...) first, then optional sessionStorage fallback if you use it elsewhere.
 async function unlockSecrets(config) {
     const params = new URLSearchParams(window.location.search);
     const keyHex = params.get("key");
-    if (!keyHex) return; // no key, fallback gracefully
+    if (!keyHex) return; // No key => graceful fallback
 
     const key = await importKey(keyHex);
 
-    for (const id of config.texts || []) {
+    for (const id of (config.texts || [])) {
         const el = document.getElementById(id);
         if (el) await revealText(el, key);
     }
 
-    for (const id of config.links || []) {
+    for (const id of (config.links || [])) {
         const el = document.getElementById(id);
         if (el) await revealLink(el, key);
     }
 
-    for (const item of config.images || []) {
+    for (const item of (config.images || [])) {
         const el = document.getElementById(item.id);
-        if (el) await revealImage(el, key, item.mimeType);
+        if (el) await revealImage(el, key, item.mimeType || "image/png");
+    }
+
+    for (const item of (config.pdfs || [])) {
+        const el = document.getElementById(item.id);
+        if (el) await revealPdf(el, key);
+    }
+
+    for (const item of (config.downloads || [])) {
+        const el = document.getElementById(item.id);
+        if (el) await revealDownload(el, key, { filename: item.filename, mimeType: item.mimeType });
     }
 }
 
-// Export if needed (for module use)
+// Optional CommonJS export
 if (typeof module !== "undefined") {
     module.exports = { unlockSecrets };
 }
