@@ -1,0 +1,9 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<img id="hello.jpeg" data-secret="/secret/pic.json" src="https://avatars.githubusercontent.com/u/47549331?s=400&u=f5a2e7e64d5b5cd8c961f737bf667000f7e12ca8&v=4" alt="hello">
+
+{{ page.content | safe }}
+
+{% endblock content %}
