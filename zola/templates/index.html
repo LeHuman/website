@@ -11,7 +11,7 @@
 
     <title id="site-title" data-secret="{{ get_url(path='/secret/title.json') }}" >{% block title %}{{ config.title }}{% endblock title %}</title>
     <link rel="icon" type="image/x-icon"
-        href="https://raw.githubusercontent.com/LeHuman/website/refs/heads/main/zola/static/favicon.ico">
+        href="{{ get_url(path='favicon.ico') }}">
 
     {% block css %}
     <link rel="stylesheet" href="{{ get_url(path='print.css')}}" media="print">

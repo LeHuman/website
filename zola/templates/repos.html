@@ -26,7 +26,7 @@
         </div>
         {% else %}
         <div class="post-bg"
-            style="background: url(https://raw.githubusercontent.com/LeHuman/website/refs/heads/main/zola/static/Placeholder.svg); background-size: cover; filter: brightness(30%) contrast(80%);">
+            style="background: url({{ get_url(path='Placeholder.svg') }}); background-size: cover; filter: brightness(30%) contrast(80%);">
         </div>
         {% endif %}
         {% endif %}

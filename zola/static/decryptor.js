@@ -196,7 +196,9 @@ async function unlockSecrets(config) {
     }
 }
 
-// TODO: clear cache on reload
+window.addEventListener("beforeunload", () => {
+    sessionStorage.removeItem("secretCache");
+});
 
 // Optional CommonJS export
 if (typeof module !== "undefined") {
