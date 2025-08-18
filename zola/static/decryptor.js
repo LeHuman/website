@@ -3,6 +3,16 @@
 // Supports inline (data-ciphertext + data-iv) OR external JSON (data-secret="/path.json").
 // JSON format: { "iv": "<hex>", "ct": "<hex>" }
 
+// Initialize secretCache from sessionStorage or create a new Map
+const secretCache = new Map(
+    JSON.parse(sessionStorage.getItem("secretCache") || "[]")
+);
+
+// Function to save the cache back to sessionStorage
+function saveSecretCache() {
+    sessionStorage.setItem("secretCache", JSON.stringify(Array.from(secretCache.entries())));
+}
+
 function hexToBytes(hex) {
     const bytes = new Uint8Array(hex.length / 2);
     for (let i = 0; i < hex.length; i += 2) {
@@ -30,9 +40,11 @@ async function getCipherData(el) {
         if (!resp.ok) throw new Error(`Failed to fetch secret: ${resp.status}`);
         const { iv, ct } = await resp.json();
         if (!iv || !ct) throw new Error("Secret JSON missing iv/ct");
-        return { iv, ct };
+        return { iv, ct, cacheKey: `url:${el.dataset.secret}` };
     } else if (el.dataset.ciphertext && el.dataset.iv) {
-        return { iv: el.dataset.iv, ct: el.dataset.ciphertext };
+        const iv = el.dataset.iv;
+        const ct = el.dataset.ciphertext;
+        return { iv, ct, cacheKey: `inline:${iv}:${ct.substring(0, 32)}` }; // partial ct to limit key length
     }
     throw new Error("No ciphertext/iv or data-secret on element");
 }
@@ -41,30 +53,61 @@ async function getCipherData(el) {
 
 async function revealText(el, key) {
     try {
-        const { iv, ct } = await getCipherData(el);
-        const data = await decryptData(key, iv, ct);
-        el.textContent = new TextDecoder().decode(data);
+        const { iv, ct, cacheKey } = await getCipherData(el);
+
+        if (secretCache.has(cacheKey)) {
+            el.textContent = secretCache.get(cacheKey);
+        } else {
+            const data = await decryptData(key, iv, ct);
+            const text = new TextDecoder().decode(data);
+            secretCache.set(cacheKey, text);
+            saveSecretCache(); // Save to sessionStorage
+            el.textContent = text;
+        }
         el.style.display = "";
-    } catch (e) { console.warn("Text decrypt failed:", e); }
+    } catch (e) {
+        console.warn("Text decrypt failed:", e);
+    }
 }
 
 async function revealLink(el, key) {
     try {
-        const { iv, ct } = await getCipherData(el);
-        const data = await decryptData(key, iv, ct);
-        const href = new TextDecoder().decode(data);
+        const { iv, ct, cacheKey } = await getCipherData(el);
+
+        let href;
+        if (secretCache.has(cacheKey)) {
+            href = secretCache.get(cacheKey);
+        } else {
+            const data = await decryptData(key, iv, ct);
+            href = new TextDecoder().decode(data);
+            secretCache.set(cacheKey, href);
+            saveSecretCache(); // Save to sessionStorage
+        }
+
         el.href = href;
         if (!el.textContent.trim() && el.dataset.keep === undefined) el.textContent = "Secret Link";
         el.style.display = "";
-    } catch (e) { console.warn("Link decrypt failed:", e); }
+    } catch (e) {
+        console.warn("Link decrypt failed:", e);
+    }
 }
 
 async function revealImage(el, key, mimeType = "image/png") {
     try {
-        const { iv, ct } = await getCipherData(el);
-        const data = await decryptData(key, iv, ct);
-        const blob = new Blob([data], { type: mimeType });
-        el.src = URL.createObjectURL(blob);
+        const { iv, ct, cacheKey } = await getCipherData(el);
+
+        let url;
+        if (secretCache.has(cacheKey)) {
+            url = secretCache.get(cacheKey);
+        } else {
+            const data = await decryptData(key, iv, ct);
+            const blob = new Blob([data], { type: mimeType });
+            url = URL.createObjectURL(blob);
+            secretCache.set(cacheKey, url);
+            saveSecretCache(); // Save to sessionStorage
+        }
+
+        el.src = url;
         el.style.display = "";
     } catch (e) { console.warn("Image decrypt failed:", e); }
 }
@@ -72,12 +115,19 @@ async function revealImage(el, key, mimeType = "image/png") {
 // View PDF inline via <iframe> or <object>
 async function revealPdf(el, key) {
     try {
-        const { iv, ct } = await getCipherData(el);
-        const data = await decryptData(key, iv, ct);
-        const blob = new Blob([data], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
+        const { iv, ct, cacheKey } = await getCipherData(el);
 
-        // Works for <iframe>, <object>, or <embed>
+        let url;
+        if (secretCache.has(cacheKey)) {
+            url = secretCache.get(cacheKey);
+        } else {
+            const data = await decryptData(key, iv, ct);
+            const blob = new Blob([data], { type: "application/pdf" });
+            url = URL.createObjectURL(blob);
+            secretCache.set(cacheKey, url);
+            saveSecretCache(); // Save to sessionStorage
+        }
+
         if ("src" in el) {
             el.src = url;
         } else if (el.tagName.toLowerCase() === "object") {
@@ -92,10 +142,18 @@ async function revealPdf(el, key) {
 async function revealDownload(el, key, opts = {}) {
     const { filename = "download.bin", mimeType = "application/octet-stream" } = opts;
     try {
-        const { iv, ct } = await getCipherData(el);
-        const data = await decryptData(key, iv, ct);
-        const blob = new Blob([data], { type: mimeType });
-        const url = URL.createObjectURL(blob);
+        const { iv, ct, cacheKey } = await getCipherData(el);
+
+        let url;
+        if (secretCache.has(cacheKey)) {
+            url = secretCache.get(cacheKey);
+        } else {
+            const data = await decryptData(key, iv, ct);
+            const blob = new Blob([data], { type: mimeType });
+            url = URL.createObjectURL(blob);
+            secretCache.set(cacheKey, url);
+            saveSecretCache(); // Save to sessionStorage
+        }
 
         el.href = url;
         el.download = filename;
@@ -105,7 +163,6 @@ async function revealDownload(el, key, opts = {}) {
 }
 
 // --- Entry point ---
-// Reads key from URL (?key=...) first, then optional sessionStorage fallback if you use it elsewhere.
 async function unlockSecrets(config) {
     const params = new URLSearchParams(window.location.search);
     const keyHex = params.get("key");
