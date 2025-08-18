@@ -196,6 +196,8 @@ async function unlockSecrets(config) {
     }
 }
 
+// TODO: clear cache on reload
+
 // Optional CommonJS export
 if (typeof module !== "undefined") {
     module.exports = { unlockSecrets };
