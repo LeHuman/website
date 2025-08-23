@@ -93,6 +93,16 @@ fn build_page(map: MetaMap, extra: Option<MetaMap>, ignore: Option<HashSet<Strin
     result
 }
 
+
+/// Convert epoch time to a rfc3339 string
+/// 
+/// # Arguments
+/// 
+/// - `epoch` (`EpochType`) - Epoch time
+/// 
+/// # Returns
+/// 
+/// - `String` - The Epoch as a string. Defaults to 1970-1-1 if invalid
 fn epoch_to_date(epoch: EpochType) -> String {
     Epoch::to_rfc3339(epoch).unwrap_or(String::from("1970-1-1"))
 }

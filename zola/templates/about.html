@@ -1,0 +1,697 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<div class="section">
+    <h1 class="post-title">{{ page.title }}</h1>
+    {{ page.content | safe }}
+</div>
+
+<p>
+    This website serves as a portfolio of my work that is online as I have always wanted a single place to more easily
+    show off things that I have worked on.
+    However, I also did not want to manually update the website every time I made something new or noteworthy.
+    As such, I made an automated process to do that for me. All it requires on my end it to embed some extra information
+    in each repository that I think is worth showing off, and the site gets regenerated every 2 weeks.
+</p>
+
+<p>
+    Below, you can see a flowchart of that automated process, otherwise referred to as a pipeline. There are hyperlinks on related items, so feel free to take a deeper look!
+</p>
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/"
+    width="90%" height="90%" viewBox="50 50 500 400" xml:space="preserve" color-interpolation-filters="sRGB"
+    class="st24" style="display: flex; justify-content: center; align-items: center;">
+    <v:documentProperties v:langID="1033" v:viewMarkup="false">
+        <v:userDefs>
+            <v:ud v:nameU="msvSubprocessMaster" v:prompt="" v:val="VT4(Rectangle)" />
+            <v:ud v:nameU="msvNoAutoConnect" v:val="VT0(1):26" />
+        </v:userDefs>
+    </v:documentProperties>
+
+    <style type="text/css">
+        <![CDATA[
+        .st1 {
+            visibility: visible font-weight: normal !important;
+        }
+
+        .st2 {
+            fill: #a5a5a5;
+            fill-opacity: 0.6;
+            filter: url(#filter_2);
+            stroke: #a5a5a5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-opacity: 0.6;
+            font-weight: normal !important;
+        }
+
+        .st3 {
+            fill: #5e5e5e;
+            stroke: #686868;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-opacity: 0.6;
+            stroke-width: 0.75;
+            font-weight: normal !important;
+        }
+
+        .st4 {
+            fill: #000000;
+            font-family: Calibri;
+            font-size: 1.16666em !important;
+            font-weight: bold
+        }
+
+        .st5 {
+            fill: url(#ptrn15-13);
+            shape-rendering: crispEdges;
+            stroke: #000000;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-opacity: 0.6;
+            stroke-width: 0.75 font-weight: normal !important;
+        }
+
+        .st6 {
+            fill: #000000;
+            font-family: Calibri;
+            font-size: 1.00001em !important;
+            font-weight: normal !important;
+        }
+
+        .st7 {
+            fill: url(#ptrn5-21);
+            shape-rendering: crispEdges;
+            stroke: #ffffff;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-opacity: 0.6;
+            stroke-width: 0.75 font-weight: normal !important;
+        }
+
+        .st8 {
+            font-size: 1em !important;
+            font-weight: normal !important;
+        }
+
+        .st9 {
+            fill: #000000;
+            font-family: Calibri;
+            font-size: 1.16666em !important;
+            font-weight: normal !important;
+        }
+
+        .st10 {
+            marker-end: url(#mrkr10-44);
+            stroke: #888888;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1 font-weight: normal !important;
+        }
+
+        .st11 {
+            fill: #888888;
+            fill-opacity: 1;
+            stroke: #888888;
+            stroke-opacity: 1;
+            stroke-width: 0.28409090909091 font-weight: normal !important;
+        }
+
+        .st12 {
+            marker-start: url(#mrkr5-50);
+            stroke: #888888;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1 font-weight: normal !important;
+        }
+
+        .st13 {
+            fill: #ffffff;
+            stroke: none;
+            stroke-linecap: butt;
+            stroke-width: 7.2 font-weight: normal !important;
+        }
+
+        .st14 {
+            fill: #000000;
+            font-family: Calibri;
+            font-size: 0.833336em !important;
+            font-weight: normal !important;
+        }
+
+        .st15 {
+            fill: url(#ptrn5-59);
+            shape-rendering: crispEdges;
+            stroke: #ffffff;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-opacity: 0.6;
+            stroke-width: 0.75 font-weight: normal !important;
+        }
+
+        .st16 {
+            marker-end: url(#mrkr4-85);
+            stroke: #888888;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1 font-weight: normal !important;
+        }
+
+        .st17 {
+            marker-end: url(#mrkr5-131);
+            marker-start: url(#mrkr5-50);
+            stroke: #888888;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1 font-weight: normal !important;
+        }
+
+        .st18 {
+            fill: #ffffff;
+            stroke: none;
+            stroke-linecap: butt font-weight: normal !important;
+        }
+
+        .st19 {
+            fill: #000000;
+            font-family: Calibri;
+            font-size: 0.666664em !important;
+            font-weight: normal !important;
+        }
+
+        .st20 {
+            font-size: 0.83333em !important;
+            font-style: italic font-weight: normal !important;
+        }
+
+        .st21 {
+            font-size: 1.25001em !important;
+            font-weight: normal !important;
+        }
+
+        .st22 {
+            fill: #ebe4da;
+            stroke: #b28a24;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-opacity: 0.6;
+            stroke-width: 0.75 font-weight: normal !important;
+        }
+
+        .st23 {
+            marker-end: url(#mrkr4-85);
+            stroke: #888888;
+            stroke-dasharray: 7, 5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1 font-weight: normal !important;
+        }
+
+        .st24 {
+            fill: none;
+            fill-rule: evenodd;
+            font-size: 12px !important;
+            overflow: visible;
+            stroke-linecap: square;
+            stroke-miterlimit: 3 font-weight: normal !important;
+        }
+        ]]>
+    </style>
+
+    <defs id="Patterns_And_Gradients">
+        <pattern id="ptrn15-13" v:fillPattern="15" v:foreground="#f2f2f2" v:background="#ececec"
+            patternUnits="userSpaceOnUse" width="6" height="6" viewBox="0 0 64 64">
+            <image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+                xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAAoSURBVChTY/j06dN/EH7z5g0Yo/MZsAki88EK8CkCW4FP0cC74dN/AE5b8wG7R92tAAAAAElFTkSuQmCC" />
+        </pattern>
+        <pattern id="ptrn5-21" v:fillPattern="5" v:foreground="#758a5d" v:background="#7e9367"
+            patternUnits="userSpaceOnUse" width="6" height="6" viewBox="0 0 64 64">
+            <image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+                xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAA/SURBVChTYyjtiv1fPSHlf93kdAwMEmcAEfgUMYAIfIrACkAYlyK4AhDGpghFAQijK8JQAMLIisC+wK0o9j8Ac2icUVfq19wAAAAASUVORK5CYII=" />
+        </pattern>
+        <pattern id="ptrn5-59" v:fillPattern="5" v:foreground="#667a96" v:background="#74859c"
+            patternUnits="userSpaceOnUse" width="6" height="6" viewBox="0 0 64 64">
+            <image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+                xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAA/SURBVChTY0ivmva/oGnW/5LWORgYJM4AIvApYgAR+BSBFYAwLkVwBSCMTRGKAhBGV4ShAISRFYF9gVvRtP8AG9yjgZgy8ygAAAAASUVORK5CYII=" />
+        </pattern>
+    </defs>
+    <defs id="Markers">
+        <g id="lend10">
+            <path
+                d="M 0 0.75 C -0.414214 0.75 -0.75 0.414214 -0.75 0 -0.75 -0.414214 -0.414214 -0.75 0 -0.75 0.414214 -0.75 0.75 -0.414214 0.75 0 0.75 0.414214 0.414214 0.75 0 0.75 Z "
+                style="stroke:none" />
+        </g>
+        <marker id="mrkr10-44" class="st11" v:arrowType="10" v:arrowSize="2" v:setback="2.64" refX="-2.64" orient="auto"
+            markerUnits="strokeWidth" overflow="visible">
+            <use xlink:href="#lend10" transform="scale(-3.52,-3.52) " />
+        </marker>
+        <g id="lend5">
+            <path d="M 2 1 L 0 0 L 1.98117 -0.993387 C 1.67173 -0.364515 1.67301 0.372641 1.98465 1.00043 "
+                style="stroke:none" />
+        </g>
+        <marker id="mrkr5-50" class="st11" v:arrowType="5" v:arrowSize="2" v:setback="5.8" refX="5.8" orient="auto"
+            markerUnits="strokeWidth" overflow="visible">
+            <use xlink:href="#lend5" transform="scale(3.52) " />
+        </marker>
+        <g id="lend4">
+            <path d="M 2 1 L 0 0 L 2 -1 L 2 1 " style="stroke:none" />
+        </g>
+        <marker id="mrkr4-85" class="st11" v:arrowType="4" v:arrowSize="2" v:setback="7.04" refX="-7.04" orient="auto"
+            markerUnits="strokeWidth" overflow="visible">
+            <use xlink:href="#lend4" transform="scale(-3.52,-3.52) " />
+        </marker>
+        <marker id="mrkr5-131" class="st11" v:arrowType="5" v:arrowSize="2" v:setback="6.16" refX="-6.16" orient="auto"
+            markerUnits="strokeWidth" overflow="visible">
+            <use xlink:href="#lend5" transform="scale(-3.52,-3.52) " />
+        </marker>
+    </defs>
+    <defs id="Filters">
+        <filter id="filter_2">
+            <feGaussianBlur stdDeviation="2" />
+        </filter>
+    </defs>
+    <g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+        <v:userDefs>
+            <v:ud v:nameU="msvThemeOrder" v:val="VT0(0):26" />
+        </v:userDefs>
+        <title>Page-1</title>
+        <v:pageProperties v:drawingScale="1" v:pageScale="1" v:drawingUnits="0" v:shadowOffsetX="9"
+            v:shadowOffsetY="-9" />
+        <v:layer v:name="Connector" v:index="0" />
+        <a xlink:href="https://github.com/LeHuman/website/actions/workflows/cd.yml" target="_blank">
+            <g id="shape29-1" v:mID="29" v:groupContext="shape" transform="translate(68.3603,-115.947)">
+                <title>Rectangle.29</title>
+                <desc>Weekly Pipeline</desc>
+                <v:userDefs>
+                    <v:ud v:nameU="visVersion" v:val="VT0(15):26" />
+                    <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+                </v:userDefs>
+                <v:textBlock v:margins="rect(4,4,4,4)" v:verticalAlign="2" />
+                <v:textRect cx="200.25" cy="418.872" width="400.5" height="80.1144" />
+                <rect x="0" y="378.815" width="400.5" height="80.1144" class="st3" />
+                <text x="4" y="450.73" class="st4" v:langID="1033">
+                    <v:paragraph />
+                    <v:tabList />Weekly Pipeline
+                </text>
+            </g>
+        </a>
+        <g id="shape1-7" v:mID="1" v:groupContext="shape" transform="translate(370.749,-256.91)">
+            <title>Rectangle</title>
+            <desc>Static Hosting</desc>
+            <v:userDefs>
+                <v:ud v:nameU="visVersion" v:val="VT0(15):26" />
+                <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+            </v:userDefs>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="42.3057" cy="438.607" width="84.62" height="40.6436" />
+            <rect x="0" y="418.286" width="84.6114" height="40.6436" class="st5" />
+            <text x="8.77" y="442.21" class="st6" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Static Hosting
+            </text>
+        </g>
+        <a xlink:href="https://www.getzola.org/" target="_blank">
+            <g id="shape2-15" v:mID="2" v:groupContext="shape" transform="translate(274.736,-141.678)">
+                <title>Parallelogram</title>
+                <desc>Zola Website Generator</desc>
+                <v:userDefs>
+                    <v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26" />
+                    <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+                </v:userDefs>
+                <v:textBlock v:margins="rect(4,4,4,4)" />
+                <v:textRect cx="42.3057" cy="438.607" width="84.62" height="40.6436" />
+                <path d="M0 458.93 L76.15 458.93 L84.61 418.29 L8.46 418.29 L0 458.93 Z" class="st7" />
+                <text x="10.53" y="435.01" class="st6" v:langID="1033">
+                    <v:paragraph v:horizAlign="1" />
+                    <v:tabList />Zola Website <tspan x="17.17" dy="1.2em" class="st8">Generator</tspan>
+                </text>
+            </g>
+        </a>
+        <a xlink:href="https://github.com/LeHuman/reposcrape" target="_blank">
+            <g id="shape3-24" v:mID="3" v:groupContext="shape" transform="translate(82.71,-141.678)">
+                <title>Parallelogram.3</title>
+                <desc>Rust Repo Scraper</desc>
+                <v:userDefs>
+                    <v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26" />
+                    <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+                </v:userDefs>
+                <v:textBlock v:margins="rect(4,4,4,4)" />
+                <v:textRect cx="42.3057" cy="438.607" width="84.62" height="40.6436" />
+                <path d="M0 458.93 L76.15 458.93 L84.61 418.29 L8.46 418.29 L0 458.93 Z" class="st7" />
+                <text x="17.62" y="435.01" class="st6" v:langID="1033">
+                    <v:paragraph v:horizAlign="1" />
+                    <v:tabList />Rust Repo <tspan x="23.82" dy="1.2em" class="st8">Scraper</tspan>
+                </text>
+            </g>
+        </a>
+        <a xlink:href="https://github.com/" target="_blank">
+            <g id="shape46-32" v:mID="46" v:groupContext="shape" transform="translate(86.3603,-256.91)">
+                <title>Rectangle.46</title>
+                <desc>Github</desc>
+                <v:userDefs>
+                    <v:ud v:nameU="visVersion" v:val="VT0(15):26" />
+                    <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+                </v:userDefs>
+                <v:textBlock v:margins="rect(4,4,4,4)" />
+                <v:textRect cx="37.4062" cy="438.607" width="74.82" height="40.6436" />
+                <rect x="0" y="418.286" width="74.8125" height="40.6436" class="st5" />
+                <text x="18.01" y="442.81" class="st9" v:langID="1033">
+                    <v:paragraph v:horizAlign="1" />
+                    <v:tabList />Github
+                </text>
+            </g>
+        </a>
+        <g id="shape11-39" v:mID="11" v:groupContext="shape" v:layerMember="0" transform="translate(123.767,-288.554)">
+            <title>Dynamic connector.11</title>
+            <path d="M0 449.93 L0 436.43 L289.29 436.43 L289.29 447.29" class="st10" />
+        </g>
+        <a xlink:href="https://docs.github.com/en/graphql" target="_blank">
+            <g id="shape16-45" v:mID="16" v:groupContext="shape" v:layerMember="0"
+                transform="translate(133.391,-182.322)">
+                <title>Dynamic connector.16</title>
+                <desc>GraphQL</desc>
+                <v:textBlock v:margins="rect(4,4,4,4)" />
+                <v:textRect cx="-9" cy="421.635" width="50" height="20.0036" />
+                <path d="M-8.66 453.13 L-8.66 452.77 L-9.4 384.34" class="st12" />
+                <rect v:rectContext="textBkgnd" x="-27.0127" y="415.635" width="40" height="12.0001" class="st13" />
+                <text x="-27.01" y="424.64" class="st14" v:langID="1033">
+                    <v:paragraph v:horizAlign="1" />
+                    <v:tabList />GraphQL
+                </text>
+            </g>
+        </a>
+        <g id="shape21-53" v:mID="21" v:groupContext="shape" transform="translate(178.723,-141.678)">
+            <title>Trapezoid</title>
+            <desc>Repository Metadata</desc>
+            <v:userDefs>
+                <v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26" />
+                <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+            </v:userDefs>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="42.3057" cy="438.607" width="84.62" height="40.6436" />
+            <path d="M0 458.93 L84.61 458.93 L76.15 418.29 L8.46 418.29 L0 458.93 Z" class="st15" />
+            <text x="16.04" y="435.01" class="st6" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Repository <tspan x="18.4" dy="1.2em" class="st8">Metadata</tspan>
+            </text>
+        </g>
+        <g id="shape22-62" v:mID="22" v:groupContext="shape" v:layerMember="0" transform="translate(163.091,-153)">
+            <title>Dynamic connector.22</title>
+            <path d="M0 449.93 L17.22 449.93" class="st10" />
+        </g>
+        <g id="shape23-67" v:mID="23" v:groupContext="shape" transform="translate(370.749,-141.678)">
+            <title>Trapezoid.23</title>
+            <desc>Generated Website</desc>
+            <v:userDefs>
+                <v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26" />
+                <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+            </v:userDefs>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="42.3057" cy="438.607" width="84.62" height="40.6436" />
+            <path d="M0 458.93 L84.61 458.93 L76.15 418.29 L8.46 418.29 L0 458.93 Z" class="st15" />
+            <text x="16.28" y="435.01" class="st6" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Generated
+                <v:lf />
+                <tspan x="22.11" dy="1.2em" class="st8">Website</tspan>
+            </text>
+        </g>
+        <g id="shape24-75" v:mID="24" v:groupContext="shape" v:layerMember="0" transform="translate(355.117,-153)">
+            <title>Dynamic connector.24</title>
+            <path d="M0 449.93 L17.22 449.93" class="st10" />
+        </g>
+        <g id="shape25-80" v:mID="25" v:groupContext="shape" v:layerMember="0" transform="translate(259.104,-153)">
+            <title>Dynamic connector.25</title>
+            <path d="M0 449.93 L12.82 449.93" class="st16" />
+        </g>
+        <a xlink:href="https://github.com/LeHuman/website/tree/main/zola/static" target="_blank">
+            <g id="shape30-86" v:mID="30" v:groupContext="shape" v:layerMember="0"
+                transform="translate(259.104,-277.232)">
+                <title>Dynamic connector</title>
+                <desc>Assets</desc>
+                <v:textBlock v:margins="rect(4,4,4,4)" />
+                <v:textRect cx="57.8815" cy="503.664" width="50" height="20.0036" />
+                <path d="M0 458.93 L57.94 458.93 L57.94 546.8" class="st16" />
+                <rect v:rectContext="textBkgnd" x="44.959" y="497.664" width="30" height="12.0001" class="st13" />
+                <text x="44.96" y="506.66" class="st14" v:langID="1033">
+                    <v:paragraph v:horizAlign="1" />
+                    <v:tabList />Assets
+                </text>
+            </g>
+        </a>
+        <g id="shape31-93" v:mID="31" v:groupContext="shape" v:layerMember="0" transform="translate(86.3603,-277.232)">
+            <title>Dynamic connector.31</title>
+            <path d="M0 458.93 L-31.5 458.93 L-31.5 580.16 L-20.64 580.16" class="st10" />
+        </g>
+        <a xlink:href="https://github.com/LeHuman/website" target="_blank">
+            <g id="shape33-98" v:mID="33" v:groupContext="shape" transform="translate(178.723,-256.91)">
+                <title>Trapezoid.33</title>
+                <desc>Website Repo</desc>
+                <v:userDefs>
+                    <v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26" />
+                    <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+                </v:userDefs>
+                <v:textBlock v:margins="rect(4,4,4,4)" />
+                <v:textRect cx="42.3057" cy="438.607" width="84.62" height="40.6436" />
+                <path d="M0 458.93 L84.61 458.93 L76.15 418.29 L8.46 418.29 L0 458.93 Z" class="st15" />
+                <text x="22.11" y="435.01" class="st6" v:langID="1033">
+                    <v:paragraph v:horizAlign="1" />
+                    <v:tabList />Website
+                    <v:lf />
+                    <tspan x="29.75" dy="1.2em" class="st8">Repo</tspan>
+                </text>
+            </g>
+        </a>
+        <g id="shape34-106" v:mID="34" v:groupContext="shape" v:layerMember="0" transform="translate(161.173,-268.232)">
+            <title>Dynamic connector.34</title>
+            <path d="M0 449.93 L19.14 449.93" class="st10" />
+        </g>
+        <a xlink:href="https://github.com/LeHuman/website/actions/caches" target="_blank">
+            <g id="shape35-111" v:mID="35" v:groupContext="shape" transform="translate(178.723,-206.164)">
+                <title>Trapezoid.35</title>
+                <desc>Metadata Cache</desc>
+                <v:userDefs>
+                    <v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26" />
+                    <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+                </v:userDefs>
+                <v:textBlock v:margins="rect(4,4,4,4)" />
+                <v:textRect cx="42.3057" cy="438.607" width="84.62" height="40.6436" />
+                <path d="M0 458.93 L84.61 458.93 L76.15 418.29 L8.46 418.29 L0 458.93 Z" class="st15" />
+                <text x="18.4" y="435.01" class="st6" v:langID="1033">
+                    <v:paragraph v:horizAlign="1" />
+                    <v:tabList />Metadata <tspan x="27.56" dy="1.2em" class="st8">Cache</tspan>
+                </text>
+            </g>
+        </a>
+        <g id="shape36-119" v:mID="36" v:groupContext="shape" v:layerMember="0" transform="translate(147.469,-256.91)">
+            <title>Dynamic connector.36</title>
+            <path d="M0 458.93 L33.48 487.64" class="st10" />
+        </g>
+        <g id="shape38-124" v:mID="38" v:groupContext="shape" v:layerMember="0" transform="translate(190.771,-206.164)">
+            <title>Dynamic connector.38</title>
+            <path d="M-4.81 462.16 L-5.11 462.36 L-30.38 479.34" class="st17" />
+        </g>
+        <g id="shape39-132" v:mID="39" v:groupContext="shape" v:layerMember="0" transform="translate(422.055,-182.322)">
+            <title>Dynamic connector.39</title>
+            <path d="M-9 458.93 L-9 391.38" class="st16" />
+        </g>
+        <g id="shape40-137" v:mID="40" v:groupContext="shape" v:layerMember="0" transform="translate(77.3603,-81.1436)">
+            <title>Dynamic connector.40</title>
+            <desc>Hosts / Makes</desc>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="32.9583" cy="449.929" width="56.08" height="17.6036" />
+            <path d="M0 449.93 L63.28 449.93" class="st10" />
+            <rect v:rectContext="textBkgnd" x="9.82577" y="445.129" width="50" height="9.59985" class="st18" />
+            <text x="9.83" y="452.33" class="st19" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Hosts / Makes
+            </text>
+        </g>
+        <g id="shape41-144" v:mID="41" v:groupContext="shape" v:layerMember="0" transform="translate(77.3603,-68.3467)">
+            <title>Dynamic connector.41</title>
+            <desc>Pulls / Pushes</desc>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="33.1875" cy="449.929" width="54.44" height="17.6036" />
+            <path d="M0 449.93 L59.33 449.93" class="st16" />
+            <rect v:rectContext="textBkgnd" x="10.8773" y="445.129" width="48" height="9.59985" class="st13" />
+            <text x="10.88" y="452.33" class="st19" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Pulls / Pushes
+            </text>
+        </g>
+        <g id="shape43-151" v:mID="43" v:groupContext="shape" transform="translate(241.374,-63)">
+            <title>Trapezoid.43</title>
+            <desc>Data Item</desc>
+            <v:userDefs>
+                <v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26" />
+                <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+            </v:userDefs>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="42.3057" cy="438.607" width="84.62" height="40.6436" />
+            <path d="M0 458.93 L84.61 458.93 L76.15 418.29 L8.46 418.29 L0 458.93 Z" class="st15" />
+            <text x="18.2" y="442.21" class="st6" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Data Item
+            </text>
+        </g>
+        <g id="shape45-158" v:mID="45" v:groupContext="shape" transform="translate(332.735,-63)">
+            <title>Rectangle.45</title>
+            <desc>Service</desc>
+            <v:userDefs>
+                <v:ud v:nameU="visVersion" v:val="VT0(15):26" />
+                <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+            </v:userDefs>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="42.3057" cy="438.607" width="84.62" height="40.6436" />
+            <rect x="0" y="418.286" width="84.6114" height="40.6436" class="st5" />
+            <text x="24.86" y="442.21" class="st6" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Service
+            </text>
+        </g>
+        <g id="shape47-165" v:mID="47" v:groupContext="shape" transform="translate(155.43,-63)">
+            <title>Parallelogram.47</title>
+            <desc>Process</desc>
+            <v:userDefs>
+                <v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26" />
+                <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+            </v:userDefs>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="42.3057" cy="438.607" width="84.62" height="40.6436" />
+            <path d="M0 458.93 L76.15 458.93 L84.61 418.29 L8.46 418.29 L0 458.93 Z" class="st7" />
+            <text x="23.73" y="442.21" class="st6" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Process
+            </text>
+        </g>
+        <g id="shape49-172" v:mID="49" v:groupContext="shape" transform="translate(510.485,-202.859)">
+            <title>Circle</title>
+            <desc>Normal Website</desc>
+            <v:userDefs>
+                <v:ud v:nameU="visVersion" v:val="VT0(15):26" />
+                <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+            </v:userDefs>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="30.375" cy="428.554" width="53.16" height="45.5625" />
+            <path d="M0 428.55 A30.375 30.375 0 0 1 60.75 428.55 A30.375 30.375 0 1 1 0 428.55 Z" class="st5" />
+            <text x="15.23" y="425.55" class="st14" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Normal
+                <v:lf />
+                <tspan x="13.55" dy="1.2em" class="st8">Website</tspan>
+            </text>
+        </g>
+        <g id="shape52-180" v:mID="52" v:groupContext="shape" transform="translate(496.704,-355.715)">
+            <title>Rectangle.52</title>
+            <desc>External Link i.e. LinkedIn</desc>
+            <v:userDefs>
+                <v:ud v:nameU="visVersion" v:val="VT0(15):26" />
+                <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+            </v:userDefs>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="37.4062" cy="438.607" width="74.82" height="40.6436" />
+            <rect x="0" y="418.286" width="74.8125" height="40.6436" class="st5" />
+            <text x="6.25" y="433.81" class="st6" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />External Link
+                <v:newlineChar />
+                <tspan x="13.33" dy="1.62em" class="st20">i.e. LinkedIn</tspan>
+            </text>
+        </g>
+        <g id="shape54-188" v:mID="54" v:groupContext="shape" transform="translate(496.704,-153.072)">
+            <title>Rectangle.54</title>
+            <desc>Public Link i.e. GitHub</desc>
+            <v:userDefs>
+                <v:ud v:nameU="visVersion" v:val="VT0(15):26" />
+                <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+            </v:userDefs>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="37.4062" cy="438.607" width="74.82" height="40.6436" />
+            <rect x="0" y="418.286" width="74.8125" height="40.6436" class="st5" />
+            <text x="11.57" y="433.81" class="st6" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Public Link
+                <v:newlineChar />
+                <tspan x="15.98" dy="1.62em" class="st20">i.e. GitHub</tspan>
+            </text>
+        </g>
+        <g id="shape55-196" v:mID="55" v:groupContext="shape" transform="translate(422.735,-63)">
+            <title>Circle.55</title>
+            <desc>Result</desc>
+            <v:userDefs>
+                <v:ud v:nameU="visVersion" v:val="VT0(15):26" />
+                <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+            </v:userDefs>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="20.3218" cy="438.607" width="35.57" height="30.4827" />
+            <path d="M0 438.61 A20.3218 20.3218 0 0 1 40.64 438.61 A20.3218 20.3218 0 1 1 0 438.61 Z" class="st5" />
+            <text x="7.71" y="441.61" class="st14" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Result
+            </text>
+        </g>
+        <g id="shape56-203" v:mID="56" v:groupContext="shape" transform="translate(510.485,-286.109)">
+            <title>Circle.56</title>
+            <desc>Unencrypted Website</desc>
+            <v:userDefs>
+                <v:ud v:nameU="visVersion" v:val="VT0(15):26" />
+                <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+            </v:userDefs>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="30.375" cy="428.554" width="53.16" height="45.5625" />
+            <path d="M0 428.55 A30.375 30.375 0 0 1 60.75 428.55 A30.375 30.375 0 1 1 0 428.55 Z" class="st5" />
+            <text x="9.19" y="424.95" class="st19" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Unencrypted
+                <v:newlineChar />
+                <tspan x="13.55" dy="1.14em" class="st21">Website</tspan>
+            </text>
+        </g>
+        <g id="shape57-211" v:mID="57" v:groupContext="shape" transform="translate(571.5,-355.715)">
+            <title>Rectangle.57</title>
+            <desc>Key</desc>
+            <v:userDefs>
+                <v:ud v:nameU="visVersion" v:val="VT0(15):26" />
+                <v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(Basic_U.vssx)" />
+            </v:userDefs>
+            <v:textBlock v:margins="rect(4,4,4,4)" />
+            <v:textRect cx="7.875" cy="438.679" width="36.01" height="20.25" transform="rotate(-90)" />
+            <rect x="0" y="418.286" width="18" height="40.6436" class="st22" />
+            <text x="-446.03" y="11.48" transform="rotate(-90)" class="st14" v:langID="1033">
+                <v:paragraph v:horizAlign="1" />
+                <v:tabList />Key
+            </text>
+        </g>
+        <g id="shape60-217" v:mID="60" v:groupContext="shape" v:layerMember="0" transform="translate(508.842,-193.715)">
+            <title>Dynamic connector.60</title>
+            <path d="M0 458.93 L-48.93 401.11" class="st16" />
+        </g>
+        <g id="shape61-222" v:mID="61" v:groupContext="shape" v:layerMember="0" transform="translate(455.36,-258.125)">
+            <title>Dynamic connector.61</title>
+            <path d="M0 460.14 L49.44 473.84" class="st23" />
+        </g>
+        <a xlink:href="https://github.com/LeHuman/website/blob/main/zola/static/decryptor.js" target="_blank">
+            <g id="shape62-227" v:mID="62" v:groupContext="shape" v:layerMember="0"
+                transform="translate(455.36,-294.736)">
+                <title>Dynamic connector.62</title>
+                <desc>Decrypt</desc>
+                <v:textBlock v:margins="rect(4,4,4,4)" />
+                <v:textRect cx="27.9216" cy="449.929" width="40" height="17.6036" />
+                <path d="M0 456.11 L48.97 445.27" class="st23" />
+                <rect v:rectContext="textBkgnd" x="15.1328" y="445.129" width="29" height="9.59985" class="st18" />
+                <text x="15.13" y="452.33" class="st19" v:langID="1033">
+                    <v:paragraph v:horizAlign="1" />
+                    <v:tabList />Decrypt
+                </text>
+            </g>
+        </a>
+        <g id="shape63-234" v:mID="63" v:groupContext="shape" v:layerMember="0" transform="translate(513.72,-355.715)">
+            <title>Dynamic connector.63</title>
+            <path d="M0 458.93 L-53.37 512.12" class="st16" />
+        </g>
+    </g>
+</svg>
+
+{% endblock content %}

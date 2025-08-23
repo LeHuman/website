@@ -1,5 +1,6 @@
 +++
 title = "About"
+template = "about.html"
 +++
 
-More about me and this website
+More about this website
