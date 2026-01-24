@@ -9,7 +9,7 @@ minify_html = true
 build_search_index = false
 
 [markdown.highlighting]
-theme = "gruvbox-dark"
+theme = "gruvbox-dark-medium"
 
 [extra]
 hyde_sticky = true
