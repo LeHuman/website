@@ -9,7 +9,7 @@ minify_html = true
 build_search_index = false
 
 [markdown]
-highlight_code = true
+highlighting = true
 highlight_theme = "gruvbox-dark"
 
 [extra]
