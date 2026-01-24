@@ -8,9 +8,8 @@ compile_sass = true
 minify_html = true
 build_search_index = false
 
-[markdown]
-highlighting = true
-highlight_theme = "gruvbox-dark"
+[markdown.highlighting]
+theme = "gruvbox-dark"
 
 [extra]
 hyde_sticky = true
