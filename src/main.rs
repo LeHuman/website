@@ -57,14 +57,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let date = Epoch::get_local();
 
-    for (_name, project) in &expanded.projects {
+    for project in expanded.projects.values() {
         pages += page::project(&lang_color_map, project);
         if date - page::get_project_epoch(project) < 2629743000 {
             pages += page::latest_project(project);
         }
     }
 
-    for (_name, repo) in &expanded.repos {
+    for repo in expanded.repos.values() {
         if repo.details.is_some() {
             if date - repo.last_update < 2629743000 {
                 pages.insert(page::latest_repo(&lang_color_map, repo));

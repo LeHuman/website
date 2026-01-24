@@ -76,8 +76,8 @@ fn build_page(map: MetaMap, extra: Option<MetaMap>, ignore: Option<HashSet<Strin
         }
     }
 
-    if let Some(extra) = extra {
-        if !extra.is_empty() {
+    if let Some(extra) = extra
+        && !extra.is_empty() {
             result += "[extra]\n";
             for (k, v) in extra.iter() {
                 if ignore.as_ref().is_some_and(|x| x.contains(k.to_owned())) {
@@ -87,7 +87,6 @@ fn build_page(map: MetaMap, extra: Option<MetaMap>, ignore: Option<HashSet<Strin
                 }
             }
         }
-    }
 
     result += STR_META;
     result
@@ -130,7 +129,7 @@ fn build_latest(title: String, update: String, path: String) -> String {
     build_page(
         metadata,
         None,
-        Some(HashSet::from(["date", "keywords"].map(|s| String::from(s)))),
+        Some(HashSet::from(["date", "keywords"].map(String::from))),
     )
 }
 
@@ -239,8 +238,7 @@ fn get_repo_strings(lang_colors: &ColorMap, repo: &Repo, latest: bool) -> (Strin
         details.demo.as_ref().and_then(|demo| {
             if [".mp4", ".webm", ".ogg"]
                 .iter()
-                .map(|ext| demo.ends_with(ext))
-                .any(|x| x)
+                .any(|ext| demo.ends_with(ext))
             {
                 extra.insert("demo_video", demo.to_owned())
             } else {
@@ -257,7 +255,7 @@ fn get_repo_strings(lang_colors: &ColorMap, repo: &Repo, latest: bool) -> (Strin
     let mut page = build_page(
         metadata,
         Some(extra),
-        Some(HashSet::from(["date", "keywords"].map(|s| String::from(s)))),
+        Some(HashSet::from(["date", "keywords"].map(String::from))),
     );
 
     page += &description;
@@ -284,7 +282,7 @@ pub fn project(lang_colors: &ColorMap, project: &Project) -> PageCollection {
     let page = build_page(
         metadata,
         None,
-        Some(HashSet::from(["date", "keywords"].map(|s| String::from(s)))),
+        Some(HashSet::from(["date", "keywords"].map(String::from))),
     );
 
     let mut metadata: MetaMap = HashMap::new();
@@ -302,7 +300,7 @@ pub fn project(lang_colors: &ColorMap, project: &Project) -> PageCollection {
     let mut index_page = build_page(
         metadata,
         Some(extra),
-        Some(HashSet::from(["date", "keywords"].map(|s| String::from(s)))),
+        Some(HashSet::from(["date", "keywords"].map(String::from))),
     );
 
     let mut dir: PathBuf = [STR_DIR_ZOLA, STR_DIR_PROJECTS].iter().collect();
@@ -319,8 +317,7 @@ pub fn project(lang_colors: &ColorMap, project: &Project) -> PageCollection {
         if let Some(details) = &repo.details {
             index_page += &details
                 .description
-                .clone()
-                .and_then(|s| Some(s.trim().to_string() + "\n"))
+                .clone().map(|s| s.trim().to_string() + "\n")
                 .unwrap_or(String::default());
         }
         dir.push(STR_FILE_PROJECT_MAIN_REPO);
