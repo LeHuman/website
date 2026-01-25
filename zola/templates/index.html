@@ -9,6 +9,9 @@
     <!-- viewport-fit=cover is to support iPhone X rounded corners and notch in landscape-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
 
+    <!-- Tell dark mode tools that this site is already dark -->
+    <meta name="color-scheme" content="dark">
+
     <title id="site-title" data-secret="{{ get_url(path='/secret/title.json') }}" >{% block title %}{{ config.title }}{% endblock title %}</title>
     <link rel="icon" type="image/x-icon"
         href="{{ get_url(path='favicon.ico') }}">
