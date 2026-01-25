@@ -3,7 +3,7 @@ title = "Le Human"
 description = "I do what I do."
 
 # The URL the site will be built for
-base_url = "https://lehuman.dev/website/"
+base_url = "https://lehuman.dev/"
 compile_sass = true
 minify_html = true
 build_search_index = false
