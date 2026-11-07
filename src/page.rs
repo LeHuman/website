@@ -77,30 +77,30 @@ fn build_page(map: MetaMap, extra: Option<MetaMap>, ignore: Option<HashSet<Strin
     }
 
     if let Some(extra) = extra
-        && !extra.is_empty() {
-            result += "[extra]\n";
-            for (k, v) in extra.iter() {
-                if ignore.as_ref().is_some_and(|x| x.contains(k.to_owned())) {
-                    result += &format!("{} = {}\n", k, v);
-                } else {
-                    result += &format!("{} = \"{}\"\n", k, v);
-                }
+        && !extra.is_empty()
+    {
+        result += "[extra]\n";
+        for (k, v) in extra.iter() {
+            if ignore.as_ref().is_some_and(|x| x.contains(k.to_owned())) {
+                result += &format!("{} = {}\n", k, v);
+            } else {
+                result += &format!("{} = \"{}\"\n", k, v);
             }
         }
+    }
 
     result += STR_META;
     result
 }
 
-
 /// Convert epoch time to a rfc3339 string
-/// 
+///
 /// # Arguments
-/// 
+///
 /// - `epoch` (`EpochType`) - Epoch time
-/// 
+///
 /// # Returns
-/// 
+///
 /// - `String` - The Epoch as a string. Defaults to 1970-1-1 if invalid
 fn epoch_to_date(epoch: EpochType) -> String {
     Epoch::to_rfc3339(epoch).unwrap_or(String::from("1970-1-1"))
@@ -292,7 +292,10 @@ pub fn project(lang_colors: &ColorMap, project: &Project) -> PageCollection {
 
     // Fallback: a project may lack a designated main repo, use the first
     // sub-repo so the section still gets a description and logo
-    let section_repo = project.repo_main.as_ref().or_else(|| project.repo_sub.first());
+    let section_repo = project
+        .repo_main
+        .as_ref()
+        .or_else(|| project.repo_sub.first());
 
     let _ = section_repo.and_then(|r| {
         r.details.as_ref().and_then(|d| {
@@ -320,13 +323,14 @@ pub fn project(lang_colors: &ColorMap, project: &Project) -> PageCollection {
     // Always write the project section index, even without a main repo,
     // otherwise the section page would be orphaned and `projects.html`
     // fails to `get_section` the missing `_index.md`
-    if let Some(repo) = section_repo {
-        if let Some(details) = &repo.details {
-            index_page += &details
-                .description
-                .clone().map(|s| s.trim().to_string() + "\n")
-                .unwrap_or(String::default());
-        }
+    if let Some(repo) = section_repo
+        && let Some(details) = &repo.details
+    {
+        index_page += &details
+            .description
+            .clone()
+            .map(|s| s.trim().to_string() + "\n")
+            .unwrap_or(String::default());
     }
     dir.push(STR_FILE_PROJECT_MAIN_REPO);
     result.files.insert(dir.to_owned(), index_page);
