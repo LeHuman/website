@@ -10,12 +10,12 @@ license = "MIT OR Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-chrono = "0.4.43"
-reposcrape = { version = "0.1.6" }
+chrono = "0.4.45"
+reposcrape = { version = "0.1.7" }
 slug = "0.1.6"
-tokio = "1.49.0"
+tokio = "1.54.1"
 tracing = "0.1.44"
-tracing-subscriber = "0.3.22"
+tracing-subscriber = "0.3.23"
 dotenvy = { version = "0.15.7", optional = true }
 show-option = "0.2.0"
 
