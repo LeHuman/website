@@ -290,7 +290,11 @@ pub fn project(lang_colors: &ColorMap, project: &Project) -> PageCollection {
     metadata.insert("sort_by", "title".to_string());
     metadata.insert("template", "project.html".to_string());
 
-    let _ = project.repo_main.as_ref().and_then(|r| {
+    // Fallback: a project may lack a designated main repo, use the first
+    // sub-repo so the section still gets a description and logo
+    let section_repo = project.repo_main.as_ref().or_else(|| project.repo_sub.first());
+
+    let _ = section_repo.and_then(|r| {
         r.details.as_ref().and_then(|d| {
             d.logo
                 .as_ref()
@@ -313,17 +317,20 @@ pub fn project(lang_colors: &ColorMap, project: &Project) -> PageCollection {
     dir.push(slug);
     result.directories.insert(dir.to_owned());
 
-    if let Some(repo) = &project.repo_main {
+    // Always write the project section index, even without a main repo,
+    // otherwise the section page would be orphaned and `projects.html`
+    // fails to `get_section` the missing `_index.md`
+    if let Some(repo) = section_repo {
         if let Some(details) = &repo.details {
             index_page += &details
                 .description
                 .clone().map(|s| s.trim().to_string() + "\n")
                 .unwrap_or(String::default());
         }
-        dir.push(STR_FILE_PROJECT_MAIN_REPO);
-        result.files.insert(dir.to_owned(), index_page);
-        dir.pop();
     }
+    dir.push(STR_FILE_PROJECT_MAIN_REPO);
+    result.files.insert(dir.to_owned(), index_page);
+    dir.pop();
 
     for repo in &project.repo_sub {
         let (title, page) = get_repo_strings(lang_colors, repo, false);
